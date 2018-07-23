@@ -1,0 +1,9 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
+	<f:block>
+		<f:entry title="${%DSpot conf file}" field="dspotConf"
+			optional="false" description="Specify the dspot config file location (e.g. dspot.properties).">
+			<f:textbox />
+		</f:entry>
+	</f:block>
+</j:jelly>

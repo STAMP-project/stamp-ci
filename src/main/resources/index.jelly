@@ -1,0 +1,4 @@
+<?jelly escape-by-default='true'?>
+<div>
+      This plugin allows to execute Junit tests amplification using Dspot.
+</div>
