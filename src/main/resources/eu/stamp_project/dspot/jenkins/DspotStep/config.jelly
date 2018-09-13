@@ -1,8 +1,24 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
 	<f:block>
-		<f:entry title="${%DSpot conf file}" field="dspotConf"
-			optional="false" description="Specify the dspot config file location (e.g. dspot.properties).">
+		<f:entry title="${%Project Location}" field="projectPath"
+			optional="false" description="path to the target project root from the folder where dspot is executed. Defaults to Workspace">
+			<f:textbox />
+		</f:entry>
+		<f:entry title="${%Source location}" field="srcCode"
+			optional="true" description="path to the source code folder.">
+			<f:textbox />
+		</f:entry>
+		<f:entry title="${%Tests location}" field="testCode"
+			optional="true" description="path to the test source folder.">
+			<f:textbox />
+		</f:entry>
+		<f:entry title="${%Filter}" field="testFilter"
+			optional="true" description="filter on the package name containing tests to be amplified ">
+			<f:textbox />
+		</f:entry>
+		<f:entry title="${%Output directory}" field="outputDir"
+			optional="true" description=" path to the output folder.">
 			<f:textbox />
 		</f:entry>
 	</f:block>

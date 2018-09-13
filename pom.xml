@@ -5,34 +5,66 @@
 	<parent>
 		<groupId>org.jenkins-ci.plugins</groupId>
 		<artifactId>plugin</artifactId>
-		<version>3.4</version>
+		<version>3.16</version>
 		<relativePath />
 	</parent>
 	<groupId>eu.stamp-project</groupId>
 	<artifactId>dspot-jenkins-plugin</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<packaging>hpi</packaging>
 	<properties>
-		<jenkins.version>2.7.3</jenkins.version>
+		<jenkins.version>2.60.3</jenkins.version>
 		<java.level>8</java.level>
 	</properties>
-	<name>Jenkinbs Plugin to run Dspot</name>
+	<name>Jenkins Plugin to run DSpot</name>
 	<licenses>
 		<license>
 			<name>MIT License</name>
 			<url>https://opensource.org/licenses/MIT</url>
 		</license>
 	</licenses>
-	<!-- Assuming you want to host on @jenkinsci: <url>https://wiki.jenkins.io/display/JENKINS/TODO+Plugin</url> 
-		<scm> <connection>scm:git:git://github.com/jenkinsci/${project.artifactId}-plugin.git</connection> 
-		<developerConnection>scm:git:git@github.com:jenkinsci/${project.artifactId}-plugin.git</developerConnection> 
-		<url>https://github.com/jenkinsci/${project.artifactId}-plugin</url> </scm> -->
+	<organization>
+		<name>STAMP Project</name>
+		<url>https://www.stamp-project.eu</url>
+	</organization>
+	<issueManagement>
+		<system>GitHub</system>
+		<url>https://github.com/STAMP-project/dspot-jenkins-plugin/issues</url>
+	</issueManagement>
+	<scm>
+		<url>https://github.com/STAMP-project/dspot-jenkins-plugin</url>
+		<connection>scm:git:git://github.com:STAMP-project/dspot-jenkins-plugin.git</connection>
+		<developerConnection>scm:git:git@github.com:STAMP-project/dspot-jenkins-plugin.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
+	<url>https://github.com/STAMP-project/dspot-jenkins-plugin</url>
+	<developers>
+		<developer>
+			<name>Valentina Di Giacomo</name>
+			<email>valentina.digiacomo@eng.it</email>
+			<organization>Engineering</organization>
+			<organizationUrl>www.eng.it</organizationUrl>
+		</developer>
+	</developers>
 	<repositories>
 		<repository>
 			<id>repo.jenkins-ci.org</id>
 			<url>https://repo.jenkins-ci.org/public/</url>
 		</repository>
+
+		<repository>
+			<id>ossrh-test-runner-snapshots</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</repository>
 	</repositories>
+
 	<pluginRepositories>
 		<pluginRepository>
 			<id>repo.jenkins-ci.org</id>
@@ -40,16 +72,35 @@
 		</pluginRepository>
 	</pluginRepositories>
 	<dependencies>
-	<dependency>
-    <groupId>eu.stamp-project</groupId>
-    <artifactId>dspot</artifactId>
-    <version>1.1.1-SNAPSHOT</version>
-</dependency>
-	<dependency>
-    <groupId>commons-io</groupId>
-    <artifactId>commons-io</artifactId>
-    <version>2.5</version>
-</dependency>
+		<dependency>
+			<groupId>eu.stamp-project</groupId>
+			<artifactId>test-runner</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>eu.stamp-project</groupId>
+			<artifactId>dspot</artifactId>
+			<version>1.1.11-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	<description>Run Dspot as a Build step in Jenkins</description>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>eu.stamp-project</groupId>
+				<artifactId>test-runner</artifactId>
+				<version>1.0.10-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.maven.shared</groupId>
+				<artifactId>maven-invoker</artifactId>
+				<version>3.0.1</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>

@@ -1,0 +1,12 @@
+#relative path to the target project root from the folder where dspot is executed
+project=./
+#relative path to the source project from the project properties
+src=src/main/java/
+#relative path to the test source project from the project properties
+testSrc=src/test/java
+#java version used
+javaVersion=8
+# (optional) path to the output folder, default to "output_diversify"
+outputDirectory=dspot-out/
+# (optional) filter on the package name containing tests to be amplified ("example" => "example.*"
+filter=eu.stamp_project.examples.dhell*
