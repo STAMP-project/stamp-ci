@@ -11,7 +11,7 @@ install:
   - mvn compile -DskipTests -Dmaven.javadoc.skip=true -Dcheckstyle.skip=true
 
 script:
-  - mvn package 
+  - mvn package -DskipTests
 
 branch:
   only:
