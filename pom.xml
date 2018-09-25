@@ -5,15 +5,15 @@
 	<parent>
 		<groupId>org.jenkins-ci.plugins</groupId>
 		<artifactId>plugin</artifactId>
-		<version>3.16</version>
+		<version>3.4</version>
 		<relativePath />
 	</parent>
 	<groupId>eu.stamp-project</groupId>
 	<artifactId>dspot-jenkins-plugin</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>hpi</packaging>
 	<properties>
-		<jenkins.version>2.60.3</jenkins.version>
+		<jenkins.version>2.7.3</jenkins.version>
 		<java.level>8</java.level>
 	</properties>
 	<name>Jenkins Plugin to run DSpot</name>
@@ -85,7 +85,7 @@
 		<dependency>
 			<groupId>eu.stamp-project</groupId>
 			<artifactId>dspot</artifactId>
-			<version>1.1.11-SNAPSHOT</version>
+			<version>1.1.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	<description>Run Dspot as a Build step in Jenkins</description>
@@ -94,7 +94,7 @@
 			<dependency>
 				<groupId>eu.stamp-project</groupId>
 				<artifactId>test-runner</artifactId>
-				<version>1.0.10-SNAPSHOT</version>
+				<version>1.1.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.maven.shared</groupId>

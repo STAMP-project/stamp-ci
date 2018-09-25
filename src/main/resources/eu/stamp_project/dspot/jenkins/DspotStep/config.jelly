@@ -2,24 +2,36 @@
 <j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
 	<f:block>
 		<f:entry title="${%Project Location}" field="projectPath"
-			optional="false" description="path to the target project root from the folder where dspot is executed. Defaults to Workspace">
-			<f:textbox />
+			description="path to the target project root from the folder where dspot is executed. Defaults to Workspace">
+			<f:textbox default="${descriptor.defaultProjectPath}" />
 		</f:entry>
 		<f:entry title="${%Source location}" field="srcCode"
-			optional="true" description="path to the source code folder.">
-			<f:textbox />
+			description="path to the source code folder.">
+			<f:textbox default="${descriptor.defaultSrcCode}" />
 		</f:entry>
 		<f:entry title="${%Tests location}" field="testCode"
-			optional="true" description="path to the test source folder.">
-			<f:textbox />
+			description="path to the test source folder.">
+			<f:textbox default="${descriptor.defaultTestCode}" />
+		</f:entry>
+		<f:entry title="${%Source binary location}" field="srcClasses"
+			description="path to the compiled code folder. (.class files)">
+			<f:textbox default="${descriptor.defaultSrcClasses}" />
+		</f:entry>
+		<f:entry title="${%Tests binary location}" field="testClasses"
+			description="path to the compiled tests folder. (.class files)">
+			<f:textbox default="${descriptor.defaultTestClasses}" />
 		</f:entry>
 		<f:entry title="${%Filter}" field="testFilter"
-			optional="true" description="filter on the package name containing tests to be amplified ">
-			<f:textbox />
+			description="filter on the package name containing tests to be amplified ">
+			<f:textbox default="${descriptor.defaultTestFilter}" />
 		</f:entry>
 		<f:entry title="${%Output directory}" field="outputDir"
-			optional="true" description=" path to the output folder.">
-			<f:textbox />
+			description=" path to the output folder.">
+			<f:textbox default="${descriptor.defaultOutputDir}" />
+		</f:entry>
+		<f:entry title="${%Run on changes}" field="onlyChanges"
+			description="Runs only on newly committed tests">
+			<f:checkbox default="${descriptor.defaultOnlyChanges}" />
 		</f:entry>
 	</f:block>
 </j:jelly>
