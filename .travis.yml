@@ -3,11 +3,17 @@ language: java
 jdk:
   - oraclejdk8
 
-install: true
+cache:
+  directories:
+    - $HOME/.m2
+    
+install:
+  - mvn compile -DskipTests -Dmaven.javadoc.skip=true -Dcheckstyle.skip=true
 
 script:
-  - mvn -Dmaven.test.skip=true clean package
+  - mvn package 
 
 branch:
   only:
     - master
+    
