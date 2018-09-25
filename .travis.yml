@@ -6,7 +6,7 @@ jdk:
 install: true
 
 script:
-  - mvn clean package
+  - mvn -Dmaven.test.skip=true clean package
 
 branch:
   only:
