@@ -12,6 +12,19 @@ install:
 
 script:
   - mvn package -DskipTests
+ 
+before_deploy:
+  - export RELEASE_FILE=$(ls target/*.hpi)
+  - echo "Deploying $RELEASE_FILE to GitHub"
+  
+deploy:
+  provider: releases
+  api_key: "${env.GITHUB_TOKEN}" 
+  file:
+    - "${RELEASE_FILE}"
+  skip_cleanup: true
+  on:
+    tags: true
 
 branch:
   only:
