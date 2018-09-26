@@ -19,7 +19,7 @@ before_deploy:
   
 deploy:
   provider: releases
-  api_key: "${env.GITHUB_TOKEN}" 
+  api_key: ${env.GITHUB_TOKEN} 
   file:
     - "${RELEASE_FILE}"
   skip_cleanup: true
