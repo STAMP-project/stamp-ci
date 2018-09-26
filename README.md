@@ -1,4 +1,5 @@
 # STAMP DSpot Jenkins plugin
+[![Build Status](https://travis-ci.org/STAMP-project/dspot-jenkins-plugin.svg?branch=master)](https://travis-ci.org/STAMP-project/dspot-jenkins-plugin) 
 
 The plugin is meant to run DSpot as a build step within a Jenkins Freestyle job. (Pipeline support to come soon).
 
