@@ -144,11 +144,7 @@ public class DspotStep extends Builder {
 		init_properties.setProperty(ConstantsProperties.SRC_CLASSES.getName(),
 				new FilePath(build.getWorkspace(), srcClasses).getRemote());
 
-		InputConfiguration input;
-		input = InputConfiguration.initialize(init_properties);
-		input.setUseWorkingDirectory(true);
-		input.setVerbose(true);
-		
+		InputConfiguration.initialize(init_properties).setUseWorkingDirectory(true).setVerbose(true);
 
 		// analyze changes in workspace
 		List<String> testList = new ArrayList<>();
@@ -175,17 +171,16 @@ public class DspotStep extends Builder {
 		}
 
 		try {
-			DSpot dspot = new DSpot(input);
-			input.getFactory().getEnvironment().setInputClassLoader(DspotStep.class.getClassLoader());
+			DSpot dspot = new DSpot();
+			InputConfiguration.get().getFactory().getEnvironment().setInputClassLoader(DspotStep.class.getClassLoader());
 			if (onlyChanges) {
-				dspot.amplifyAllTestsNames(
-						testList.stream()
-						.map(this::pathToQualifiedName)
-						.collect(Collectors.toList()));
+				dspot.amplifyTestClasses(
+						testList.stream().map(this::pathToQualifiedName).collect(Collectors.toList()));
 			} else
 				dspot.amplifyAllTests();
 		} catch (Exception e) {
-			listener.getLogger().println("There was an error running DSpot on your project. Check the logs for details.");
+			listener.getLogger()
+					.println("There was an error running DSpot on your project. Check the logs for details.");
 			LOGGER.error("Build Failed", e);
 			build.setResult(Result.UNSTABLE);
 		}
@@ -194,7 +189,7 @@ public class DspotStep extends Builder {
 
 	public String pathToQualifiedName(String path) {
 		String regex = File.separator.equals("/") ? "/" : "\\\\";
-		return path.substring(getTestCode().length(), path.length()-".java".length()).replaceAll(regex, ".");
+		return path.substring(getTestCode().length(), path.length() - ".java".length()).replaceAll(regex, ".");
 	}
 
 	public static final Function<String, String> shouldUpdatePath = string -> File.separator.equals("/") ? string
