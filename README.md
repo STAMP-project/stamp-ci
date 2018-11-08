@@ -35,9 +35,9 @@ All variables are optional and default to the values in the table
 
 ## Options
 
-| Option  | pipeline variable | Usage   | Default                                            |
-| -------- | ------  | --------------------------------------------------- |
-| `Project Location`   |  `projectPath`  | 	path to the target project root from the folder where dspot is executed.     | Defaults to Workspace|
+| Option  | pipeline variable | Usage   | Default   |
+| -------- | ------  | --------------------------------------------------- | ------- |
+| `Project Location`   |  `projectPath`  | 	path to the target project root from the folder where dspot is executed. | Defaults to Workspace |
 | `Source location`    | `srcCode` |  path to the source code folder	| `src/main/java/` |
 | `Tests location`  | `testCode` | 	path to the test source folder | `src/test/java/`  |
 | `Source binary location`  | `srcClasses` |  path to the compiled code folder. (.class files) | `target/classes/`  |
