@@ -2,6 +2,7 @@ package eu.stamp_project.dspot.jenkins;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -9,6 +10,8 @@ import java.util.List;
 import java.util.Properties;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import javax.annotation.Nonnull;
 
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -24,8 +27,9 @@ import hudson.FilePath;
 import hudson.Launcher;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
-import hudson.model.BuildListener;
 import hudson.model.Result;
+import hudson.model.Run;
+import hudson.model.TaskListener;
 import hudson.scm.ChangeLogSet;
 import hudson.scm.EditType;
 import hudson.scm.ChangeLogSet.AffectedFile;
@@ -33,14 +37,28 @@ import hudson.scm.ChangeLogSet.Entry;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Builder;
+import jenkins.tasks.SimpleBuildStep;
 
-public class DspotStep extends Builder {
+public class DspotStep extends Builder implements SimpleBuildStep {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DspotStep.class);
 
-	private String projectPath, srcCode, testCode, srcClasses, testClasses, testFilter, outputDir;
+	@Nonnull
+	private String projectPath = DescriptorImpl.defaultProjectPath;
+	@Nonnull
+	private String srcCode = DescriptorImpl.defaultSrcCode;
+	@Nonnull
+	private String testCode = DescriptorImpl.defaultTestCode;
+	@Nonnull
+	private String srcClasses = DescriptorImpl.defaultSrcClasses;
+	@Nonnull
+	private String testClasses = DescriptorImpl.defaultTestClasses;
+	@Nonnull
+	private String testFilter = DescriptorImpl.defaultTestFilter;
+	@Nonnull
+	private String outputDir = DescriptorImpl.defaultOutputDir;
 
-	private boolean onlyChanges;
+	private boolean onlyChanges = false;
 
 	private Properties init_properties;
 
@@ -87,37 +105,37 @@ public class DspotStep extends Builder {
 	}
 
 	@DataBoundSetter
-	public void setOutputDir(String outputDir) {
+	public void setOutputDir(@Nonnull String outputDir) {
 		this.outputDir = outputDir;
 	}
 
 	@DataBoundSetter
-	public void setProjectPath(String filepath) {
+	public void setProjectPath(@Nonnull String filepath) {
 		projectPath = filepath;
 	}
 
 	@DataBoundSetter
-	public void setSrcClasses(String srcClasses) {
+	public void setSrcClasses(@Nonnull String srcClasses) {
 		this.srcClasses = srcClasses;
 	}
 
 	@DataBoundSetter
-	public void setSrcCode(String srcCode) {
+	public void setSrcCode(@Nonnull String srcCode) {
 		this.srcCode = srcCode;
 	}
 
 	@DataBoundSetter
-	public void setTestClasses(String testClasses) {
+	public void setTestClasses(@Nonnull String testClasses) {
 		this.testClasses = testClasses;
 	}
 
 	@DataBoundSetter
-	public void setTestCode(String testCode) {
+	public void setTestCode(@Nonnull String testCode) {
 		this.testCode = testCode;
 	}
 
 	@DataBoundSetter
-	public void setTestFilter(String testFilter) {
+	public void setTestFilter(@Nonnull String testFilter) {
 		this.testFilter = testFilter;
 	}
 
@@ -126,75 +144,94 @@ public class DspotStep extends Builder {
 		return BuildStepMonitor.NONE;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener)
+	public void perform(Run<?, ?> run, FilePath wsp, Launcher arg2, TaskListener listener)
 			throws InterruptedException, IOException {
-
 		init_properties.setProperty(ConstantsProperties.PROJECT_ROOT_PATH.getName(),
-				new FilePath(build.getWorkspace(), projectPath).getRemote());
-		init_properties.setProperty(ConstantsProperties.SRC_CODE.getName(),
-				new FilePath(build.getWorkspace(), srcCode).getRemote());
+				new FilePath(wsp, projectPath).getRemote());
+		init_properties.setProperty(ConstantsProperties.SRC_CODE.getName(), new FilePath(wsp, srcCode).getRemote());
 		init_properties.setProperty(ConstantsProperties.TEST_SRC_CODE.getName(),
-				new FilePath(build.getWorkspace(), testCode).getRemote());
+				new FilePath(wsp, testCode).getRemote());
 		init_properties.setProperty(ConstantsProperties.OUTPUT_DIRECTORY.getName(),
-				new FilePath(build.getWorkspace(), outputDir).getRemote());
+				new FilePath(wsp, outputDir).getRemote());
 		init_properties.setProperty(ConstantsProperties.FILTER.getName(), testFilter);
 		init_properties.setProperty(ConstantsProperties.TEST_CLASSES.getName(),
-				new FilePath(build.getWorkspace(), testClasses).getRemote());
+				new FilePath(wsp, testClasses).getRemote());
 		init_properties.setProperty(ConstantsProperties.SRC_CLASSES.getName(),
-				new FilePath(build.getWorkspace(), srcClasses).getRemote());
+				new FilePath(wsp, srcClasses).getRemote());
 
-		InputConfiguration input;
-		input = InputConfiguration.initialize(init_properties);
-		input.setUseWorkingDirectory(true);
-		input.setVerbose(true);
-		
+		InputConfiguration.initialize(init_properties).setUseWorkingDirectory(true).setVerbose(true);
 
 		// analyze changes in workspace
 		List<String> testList = new ArrayList<>();
+
 		if (onlyChanges) {
-			ChangeLogSet<? extends Entry> changes = build.getChangeSet();
-			Iterator<? extends ChangeLogSet.Entry> itrChangeSet = changes.iterator();
-			while (itrChangeSet.hasNext()) {
-				ChangeLogSet.Entry str = itrChangeSet.next();
-				Collection<? extends ChangeLogSet.AffectedFile> affectedFiles = str.getAffectedFiles();
-				Iterator<? extends ChangeLogSet.AffectedFile> affectedFilesItr = affectedFiles.iterator();
-				while (affectedFilesItr.hasNext()) {
-					AffectedFile file = affectedFilesItr.next();
-					if (file.getEditType().equals(EditType.ADD) || file.getEditType().equals(EditType.EDIT)) {
-						String path = file.getPath();
-						if (path.startsWith(shouldUpdatePath.apply(testCode))) {
-							testList.add(path);
-							listener.getLogger().println("New test found at: " + path);
+			ChangeLogSet<? extends Entry> changes = null;
+			if (AbstractBuild.class.isInstance(run)) {
+				AbstractBuild build = (AbstractBuild) run;
+				changes = build.getChangeSet();
+			} else {
+				try {
+					// checking for WorkflowRun's getChangeSets method
+					List<ChangeLogSet<? extends ChangeLogSet.Entry>> changeSets = (List<ChangeLogSet<? extends ChangeLogSet.Entry>>) run
+							.getClass().getMethod("getChangeSets").invoke(run);
+					if (!changeSets.isEmpty()) {
+						changes = changeSets.get(0);
+					}
+				} catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+					// ignore
+				}
+			}
+			if (changes != null) {
+				Iterator<? extends ChangeLogSet.Entry> itrChangeSet = changes.iterator();
+				while (itrChangeSet.hasNext()) {
+					ChangeLogSet.Entry str = itrChangeSet.next();
+					Collection<? extends ChangeLogSet.AffectedFile> affectedFiles = str.getAffectedFiles();
+					Iterator<? extends ChangeLogSet.AffectedFile> affectedFilesItr = affectedFiles.iterator();
+					while (affectedFilesItr.hasNext()) {
+						AffectedFile file = affectedFilesItr.next();
+						if (file.getEditType().equals(EditType.ADD) || file.getEditType().equals(EditType.EDIT)) {
+							String path = file.getPath();
+							if (path.startsWith(shouldUpdatePath.apply(testCode))) {
+								testList.add(path);
+								listener.getLogger().println("New test found at: " + path);
+							}
 						}
 					}
 				}
+				if (testList.isEmpty())
+					listener.getLogger().println("no tests changed. DSpot will not be run.");
+			} else {
+				listener.getLogger().println("could not get last changes. DSpot will run on the whole suite.");
+				onlyChanges = false;
 			}
-			if (testList.isEmpty())
-				listener.getLogger().println("no tests changed. DSpot will not be run.");
+
 		}
 
-		try {
-			DSpot dspot = new DSpot(input);
-			input.getFactory().getEnvironment().setInputClassLoader(DspotStep.class.getClassLoader());
+		try
+
+		{
+			DSpot dspot = new DSpot();
+			InputConfiguration.get().getFactory().getEnvironment()
+					.setInputClassLoader(DspotStep.class.getClassLoader());
 			if (onlyChanges) {
-				dspot.amplifyAllTestsNames(
-						testList.stream()
-						.map(this::pathToQualifiedName)
-						.collect(Collectors.toList()));
+				dspot.amplifyTestClasses(testList.stream().map(this::pathToQualifiedName).collect(Collectors.toList()));
 			} else
 				dspot.amplifyAllTests();
 		} catch (Exception e) {
-			listener.getLogger().println("There was an error running DSpot on your project. Check the logs for details.");
+			listener.getLogger()
+					.println("There was an error running DSpot on your project. Check the logs for details.");
 			LOGGER.error("Build Failed", e);
-			build.setResult(Result.UNSTABLE);
+			run.setResult(Result.UNSTABLE);
 		}
-		return true;
+		return;
+
 	}
 
 	public String pathToQualifiedName(String path) {
 		String regex = File.separator.equals("/") ? "/" : "\\\\";
-		return path.substring(getTestCode().length(), path.length()-".java".length()).replaceAll(regex, ".");
+		return path.substring(getTestCode().length(), path.length() - ".java".length()).replaceAll(regex, ".");
 	}
 
 	public static final Function<String, String> shouldUpdatePath = string -> File.separator.equals("/") ? string
