@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.stamp_project.dspot.DSpot;
+import eu.stamp_project.dspot.jenkins.report.DSpotResults;
 import eu.stamp_project.program.ConstantsProperties;
 import eu.stamp_project.program.InputConfiguration;
 import hudson.Extension;
@@ -225,6 +226,10 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 			LOGGER.error("Build Failed", e);
 			run.setResult(Result.UNSTABLE);
 		}
+		
+		DSpotResults results = new DSpotResults(new FilePath(wsp, outputDir));
+		DSpotResultsAction action = new DSpotResultsAction(run, results );
+		run.addAction(action);
 		return;
 
 	}

@@ -1,0 +1,48 @@
+ <?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:y="/lib/layout"
+	xmlns:l="/lib/hudson" xmlns:jm="/it/eng/stamp_project/dspot/jenkins/tags"
+	css="/plugin/dspot-jenkins-plugin/css/style.css">
+	<table class="source">
+		<tr>
+			<td>
+				<h4> ${it.displayName} </h4>
+			</td>
+		</tr>
+		<tr>
+			<td> Time to Process</td>
+			<td> ${it.time} ms </td>
+		</tr>
+		<tr>
+			<td> Existing test cases</td>
+			<td> ${it.numOriginalTestCases} </td>
+		</tr>
+		<tr>
+			<td> Initial Coverage</td>
+			<td> <div class="mprogress">
+					<l:progressBar pos="${it.percentageinitialInstructionCovered}" />
+				</div>
+				${it.percentageinitialInstructionCovered}% (${it.initialInstructionCovered}/${it.initialInstructionTotal})
+			</td>
+		</tr>
+		<j:if test="${it.${it.percentageamplifiedInstructionCovered > ${it.percentageinitialInstructionCovered}">
+			<tr>
+				<td>New Coverage </td>
+					<td> <div class="mprogress">
+					<l:progressBar pos="${it.percentageamplifiedInstructionCovered}" />
+				</div>
+				${it.percentageamplifiedInstructionCovered}% (${it.amplifiedInstructionCovered}/${it.amplifiedInstructionTotal})
+			</td>
+			</tr>
+			<tr>
+				<td>
+					<a href="${it.urlName}">Details</a>
+				</td>
+			</tr>
+		</j:if>
+		<j:if test="${it.${it.percentageamplifiedInstructionCovered <= ${it.percentageinitialInstructionCovered}">
+			<tr>
+				<td>No new test cases </td>
+			</tr>
+		</j:if>
+	</table>
+</j:jelly>

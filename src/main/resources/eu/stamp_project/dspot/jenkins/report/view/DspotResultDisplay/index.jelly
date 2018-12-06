@@ -1,0 +1,32 @@
+ <?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout">
+	<l:layout title="STAMP - DSpot report" xmlns:jm="/eu/stamp_project/dspot/jenkins/tags"
+		css="/plugin/dspot-jenkins-plugin/css/style.css">
+		<st:include it="${it.build}" page="sidepanel.jelly" />
+		<l:main-panel>
+			<center>
+				<img src="${rootURL}/plugin/dspot-jenkins-plugin/img/STAMP_Logo_RGB.svg"
+					height="100px"></img>
+				<h2>${it.displayName}</h2>
+			</center>
+			<center>
+				<img class="trend" src="./summarizerPieGraph" />
+				<h4>Time to Amplify all Tests: ${it.overallTime} ms</h4>
+			</center>
+			<div class="center padded">
+				<a href="output">
+					<h4>
+						view Output Files
+						<l:icon class="icon-folder icon-sm" />
+					</h4>
+				</a>
+			</div>
+			<h2>Amplification Results</h2>
+			<div>
+				<j:forEach var="child" items="${it.results}">
+					<st:include page="summary.jelly" from="${child}" it="${child}"></st:include>
+				</j:forEach>
+			</div>
+		</l:main-panel>
+	</l:layout>
+</j:jelly>

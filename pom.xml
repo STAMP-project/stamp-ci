@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>eu.stamp-project</groupId>
 	<artifactId>dspot-jenkins-plugin</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<packaging>hpi</packaging>
 	<properties>
 		<jenkins.version>2.7.3</jenkins.version>
@@ -79,7 +79,7 @@
 		<dependency>
 			<groupId>eu.stamp-project</groupId>
 			<artifactId>dspot</artifactId>
-			<version>1.2.1</version>
+			<version>1.2.2-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	<description>Run Dspot as a Build step in Jenkins</description>

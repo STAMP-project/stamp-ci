@@ -1,0 +1,73 @@
+table.source {
+    border-style: solid;
+    border-color: #bbb;
+    border-spacing: 0;
+    border-collapse: collapse;
+    width: 90%;
+}
+
+table.fit {
+    width: auto;
+}
+
+td.bold{
+	font-weight:bold; 
+}
+
+
+table.source td {
+	vertical-align: center;
+    white-space: nowrap;
+}
+table.source td.left {
+    text-align: left;
+}
+table.source td.center {
+    text-align: center;
+}
+table.source td.right {
+    text-align: right;
+}
+table.source a {
+	text-decoration: none;
+}
+
+table.source tr.center {
+    text-align: center;
+    white-space: nowrap;
+}
+table.source th {
+    padding-left: 0.5em;
+    font-weight: bold;
+    background-color: #f0f0f0;
+    white-space: nowrap;
+}
+
+table.mini {
+    vertical-align: middle;
+    width: 100%;
+}
+
+table.mini td,th {
+    line-height: 1em;
+    vertical-align: middle;
+}
+
+div.title {
+    padding: 0px;
+    margin-top: 20px;
+}
+
+div.padded{
+    padding: 10px;
+    
+}
+
+.mprogress .progress-bar{
+	width: 80%;
+	height: 15px;
+}
+
+.mini .progress-bar{
+	width: 100%;
+}
