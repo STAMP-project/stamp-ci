@@ -22,7 +22,7 @@ public class DSpotResults implements Serializable {
 	private static final long serialVersionUID = -8639672864330736615L;
 
 	private transient DSpotResultsAction buildAction;
-	private transient FilePath outputDir;
+	private FilePath outputDir;
 	private ProjectTimeJSON report;
 	private Map<String, eu.stamp_project.dspot.jenkins.json.mutant.TestClassJSON> mutantsReport = new HashMap<>();
 	private Map<String, eu.stamp_project.dspot.jenkins.json.coverage.TestClassJSON> coverageReport = new HashMap<>();
