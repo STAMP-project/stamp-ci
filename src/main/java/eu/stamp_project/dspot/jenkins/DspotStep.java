@@ -64,8 +64,12 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 	private String testFilter = DescriptorImpl.defaultTestFilter;
 	@Nonnull
 	private String outputDir = DescriptorImpl.defaultOutputDir;
+	@Nonnull
+	private String secondFolder = DescriptorImpl.defaultSecondFolder;
 
 	private boolean onlyChanges = false;
+	
+	private boolean showReports = true;
 
 	@Nonnull
 	private SelectorEnum selector = DescriptorImpl.defaultSelector;
@@ -118,9 +122,39 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 		return onlyChanges;
 	}
 
+	public boolean isShowReports() {
+		return showReports;
+	}
+	
+	public BudgetizerEnum getBudgetizer() {
+		return budgetizer;
+	}
+	
+	public String getSecondFolder() {
+		return secondFolder;
+	}
+	
+	public SelectorEnum getSelector() {
+		return selector;
+	}
+	
+	public List<AmplifierEnum> getlAmplifiers() {
+		return lAmplifiers;
+	}
+	
+	public int getNumIterations() {
+		return numIterations;
+	} 
+	
+	
 	@DataBoundSetter
 	public void setOnlyChanges(boolean onlyChanges) {
 		this.onlyChanges = onlyChanges;
+	}
+	
+	@DataBoundSetter
+	public void setShowReports(boolean showReports) {
+		this.showReports = showReports;
 	}
 
 	@DataBoundSetter
@@ -157,7 +191,32 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 	public void setTestFilter(@Nonnull String testFilter) {
 		this.testFilter = testFilter;
 	}
-
+	
+	@DataBoundSetter
+	public void setBudgetizer(@Nonnull BudgetizerEnum budgetizer) {
+		this.budgetizer = budgetizer;
+	}
+	
+	@DataBoundSetter
+	public void setSelector(@Nonnull SelectorEnum selector) {
+		this.selector = selector;
+	}
+	
+	@DataBoundSetter
+	public void setlAmplifiers(@Nonnull List<AmplifierEnum> lAmplifiers) {
+		this.lAmplifiers = lAmplifiers;
+	}
+	
+	@DataBoundSetter
+	public void setNumIterations(int numIterations) {
+		this.numIterations = numIterations;
+	}
+	
+	@DataBoundSetter
+	public void setSecondFolder(@Nonnull String secondFolder) {
+		this.secondFolder = secondFolder;
+	}
+	
 	@Override
 	public BuildStepMonitor getRequiredMonitorService() {
 		return BuildStepMonitor.NONE;
@@ -180,6 +239,9 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 		init_properties.setProperty(ConstantsProperties.SRC_CLASSES.getName(),
 				new FilePath(wsp, srcClasses).getRemote());
 
+		init_properties.setProperty(ConstantsProperties.PATH_TO_SECOND_VERSION.getName(),
+				new FilePath(wsp, secondFolder).getRemote());
+		
 		InputConfiguration.initialize(init_properties).setUseWorkingDirectory(true).setVerbose(true);
 
 		// analyze changes in workspace
@@ -264,9 +326,10 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 	@Extension
 	public static class DescriptorImpl extends BuildStepDescriptor<Builder> {
 
-		public static final List<AmplifierEnum> defaultLAmplifiers = Collections.emptyList();;
+		public static final String defaultSecondFolder = "";
+		public static final List<AmplifierEnum> defaultLAmplifiers = Collections.emptyList();
 		public static final SelectorEnum defaultSelector = SelectorEnum.PitMutantScoreSelector;
-		public static final int defaultNumIterations = 1;
+		public static final int defaultNumIterations = 3;
 		public static final BudgetizerEnum defaultBudgetizer = BudgetizerEnum.NoBudgetizer;
 		public static final String defaultProjectPath = "";
 		public static final String defaultSrcCode = ConstantsProperties.SRC_CODE.getDefaultValue();
@@ -276,6 +339,7 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 		public static final String defaultTestFilter = ConstantsProperties.FILTER.getDefaultValue();
 		public static final String defaultOutputDir = "dspot-out";
 		public static final boolean defaultOnlyChanges = false;
+		public static final boolean defaultShowReports = true;
 
 		@Override
 		public String getDisplayName() {

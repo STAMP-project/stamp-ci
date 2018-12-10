@@ -1,35 +1,34 @@
- <?jelly escape-by-default='true'?>
+<?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:y="/lib/layout"
 	xmlns:l="/lib/hudson" xmlns:jm="/it/eng/stamp_project/dspot/jenkins/tags"
 	css="/plugin/dspot-jenkins-plugin/css/style.css">
-	<table class="source">
+	<h4>
+		<jm:amplifiedIcon it="${it.numNewTestCases}" />
+		${it.displayName}
+	</h4>
+	<table class="fit">
 		<tr>
-			<td>
-				<h4> ${it.displayName} </h4>
-			</td>
-		</tr>
-		<tr>
-			<td> Time to Process</td>
+			<td class="bold">Time to Process</td>
 			<td> ${it.time} ms </td>
 		</tr>
 		<tr>
-			<td> Existing test cases</td>
+			<td class="bold"> Existing test cases</td>
 			<td> ${it.numOriginalTestCases} </td>
 		</tr>
-		<j:if test="${it.numNewTestCases > 0}">
+		<j:if test="${it.numTestAmplified>0}">
 			<tr>
-				<td>New test cases</td>
-				<td> ${it.numNewTestCases}</td>
+				<td class="bold">NEW TEST CASES</td>
+				<td>${it.numNewTestCases}</td>
 			</tr>
 			<tr>
-				<td>
-					<a href="${it.urlName}">Details</a>
-				</td>
+				<td class="bold">NEW TEST CASES</td>
+				<td>${it.numNewTestCases}</td>
 			</tr>
 		</j:if>
-		<j:if test="${it.numNewTestCases <= 0}">
+		<j:if test="${it.numTestAmplified == 0}">
 			<tr>
-				<td>No new test cases </td>
+				<td class="bold">No new test cases </td>
+				<td></td>
 			</tr>
 		</j:if>
 	</table>

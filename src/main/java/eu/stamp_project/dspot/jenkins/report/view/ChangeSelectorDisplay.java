@@ -8,6 +8,7 @@ import hudson.model.Run;
 
 public class ChangeSelectorDisplay extends AbstractDSpotDisplay {
 	private List<TestCaseJSON> newTestCases;
+	public long numTestAmplified;
 
 	public ChangeSelectorDisplay() {
 	}
@@ -16,6 +17,7 @@ public class ChangeSelectorDisplay extends AbstractDSpotDisplay {
 		super(run, clazz);
 		newTestCases = ch.testCases;
 		numOriginalTestCases = ch.nbOriginalTestCases;
+		numTestAmplified = ch.nbTestAmplified;
 	}
 
 	@Override

@@ -33,27 +33,37 @@
 			description="Runs only on newly committed tests">
 			<f:checkbox default="${descriptor.defaultOnlyChanges}" />
 		</f:entry>
+			<f:entry title="${%Show Reports}" field="showReports"
+			description="Enable the visualization of DSpot results in the Jenkins UI">
+			<f:checkbox default="${descriptor.defaultShowReports}" />
+		</f:entry>
 	</f:block>
 	<f:block>
-	<f:section title="Advanced Project Options">
-  <f:advanced>
-  <f:entry title="${%Number of Iterations}" field="numIterations"
-			description="Number of Iterations">
-			<f:number default="${descriptor.defaultNumIterations}" />
-		</f:entry>
-    		<f:entry title="${%Test selector}" field="selector"
-			description="Test selector">
-			<f:enum default="${descriptor.defaultSelector}" />
-		</f:entry>
-		<f:entry title="${%Output directory}" field="budgetizer"
-			description="budgetizer">
-			<f:enum default="${descriptor.defaultBudgetizer}" />
-		</f:entry>
-		<f:entry title="${%Amplifiers}" field="lAmplifiers"
-			description="Amplifiers">
-			<f:enumSet default="${descriptor.defaultLAmplifiers}" />
-		</f:entry>
-  </f:advanced>
-</f:section>
+		<f:section title="Advanced DSpot Options">
+			<f:advanced>
+				<f:entry title="${%Number of Iterations}" field="numIterations"
+					description="Number of Iterations">
+					<f:number min="0" step="1" default="${descriptor.defaultNumIterations}" />
+				</f:entry>
+				<f:entry title="${%Test selector}" field="selector">
+					<f:enum field="selector">
+						${it.toString()}
+					</f:enum>
+				</f:entry>
+				<f:entry field="budgetizer" title="${%Budgetizer}">
+					<f:enum field="budgetizer">
+						${it.toString()}
+					</f:enum>
+				</f:entry>
+				<f:entry title="${%Amplifiers}" field="lAmplifiers"
+					description="Amplifiers">
+					<f:enumSet />
+				</f:entry>
+				<f:entry title="${%Second version Location}" field="secondFolder"
+					description="path to second version of the project. To be used with ChangeSelector">
+					<f:textbox default="${descriptor.defaultSecondFolder}" />
+				</f:entry>
+			</f:advanced>
+		</f:section>
 	</f:block>
 </j:jelly>

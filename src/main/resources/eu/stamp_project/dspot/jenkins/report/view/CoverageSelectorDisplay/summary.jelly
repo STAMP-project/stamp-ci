@@ -1,48 +1,60 @@
- <?jelly escape-by-default='true'?>
+<?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:y="/lib/layout"
 	xmlns:l="/lib/hudson" xmlns:jm="/it/eng/stamp_project/dspot/jenkins/tags"
 	css="/plugin/dspot-jenkins-plugin/css/style.css">
-	<table class="source">
+	<h4>
+		<jm:amplifiedIcon it="${it.numNewTestCases}" />
+		${it.displayName}
+	</h4>
+	<table class="fit">
 		<tr>
-			<td>
-				<h4> ${it.displayName} </h4>
-			</td>
-		</tr>
-		<tr>
-			<td> Time to Process</td>
+			<td class="bold">Time to Process</td>
 			<td> ${it.time} ms </td>
 		</tr>
 		<tr>
-			<td> Existing test cases</td>
+			<td class="bold"> Existing test cases</td>
 			<td> ${it.numOriginalTestCases} </td>
 		</tr>
 		<tr>
-			<td> Initial Coverage</td>
-			<td> <div class="mprogress">
-					<l:progressBar pos="${it.percentageinitialInstructionCovered}" />
-				</div>
-				${it.percentageinitialInstructionCovered}% (${it.initialInstructionCovered}/${it.initialInstructionTotal})
-			</td>
+			<td class="bold"> Initial coverage</td>
+			<td>
+					<div class="mprogress">
+						<l:progressBar pos="${it.initialCoverage}" />
+					</div>
+					${it.initialCoverage}% (${it.initialCovered} /
+					${it.initialTotal})
+				</td>
 		</tr>
-		<j:if test="${it.${it.percentageamplifiedInstructionCovered > ${it.percentageinitialInstructionCovered}">
+		<j:if test="${it.amplifiedCoverage>it.initialCoverage}">
 			<tr>
-				<td>New Coverage </td>
-					<td> <div class="mprogress">
-					<l:progressBar pos="${it.percentageamplifiedInstructionCovered}" />
-				</div>
-				${it.percentageamplifiedInstructionCovered}% (${it.amplifiedInstructionCovered}/${it.amplifiedInstructionTotal})
-			</td>
+				<td class="bold">NEW TEST CASES</td>
+				<td>${it.numNewTestCases}</td>
+			</tr>
+			<tr>
+				<td class="bold"> AMPLIFIED COVERAGE </td>
+				<td>
+					<div class="mprogress">
+						<l:progressBar pos="${it.amplifiedCoverage}" />
+					</div>
+					${it.amplifiedCoverage}% (${it.amplifiedCovered} /
+					${it.amplifiedTotal})
+				</td>
 			</tr>
 			<tr>
 				<td>
-					<a href="${it.urlName}">Details</a>
+					<a href="${it.urlName}">
+						Details
+						<y:icon class="icon-search icon-sm" />
+					</a>
 				</td>
 			</tr>
 		</j:if>
-		<j:if test="${it.${it.percentageamplifiedInstructionCovered <= ${it.percentageinitialInstructionCovered}">
+		<j:if test="${it.initialCoverage>=it.amplifiedCoverage}">
 			<tr>
-				<td>No new test cases </td>
+				<td class="bold">No new test cases </td>
+				<td></td>
 			</tr>
 		</j:if>
 	</table>
 </j:jelly>
+

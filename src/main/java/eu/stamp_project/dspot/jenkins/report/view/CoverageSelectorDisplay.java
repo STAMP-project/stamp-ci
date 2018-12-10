@@ -8,7 +8,10 @@ import eu.stamp_project.dspot.jenkins.json.coverage.TestClassJSON;
 import hudson.model.Run;
 
 public class CoverageSelectorDisplay extends AbstractDSpotDisplay {
-	public long numInitialInstructuions;
+	public long initialTotal;
+	public long amplifiedTotal;
+	public long amplifiedCovered;
+	public long initialCovered;
 	private List<TestCaseJSON> newTestCases;
 	
 	public CoverageSelectorDisplay() {
@@ -17,7 +20,10 @@ public class CoverageSelectorDisplay extends AbstractDSpotDisplay {
 	public CoverageSelectorDisplay(Run<?,?> run, ClassTimeJSON clazz, TestClassJSON co) {
 		super(run, clazz);
 		numOriginalTestCases = co.nbOriginalTestCases;
-		numInitialInstructuions = co.initialInstructionCovered;
+		initialTotal = co.initialInstructionCovered;
+		amplifiedTotal = co.amplifiedInstructionTotal;
+		amplifiedCovered = co.amplifiedInstructionCovered;
+		initialCovered = co.initialInstructionCovered;
 		newTestCases = co.testCases;
 		
 	}
@@ -25,6 +31,14 @@ public class CoverageSelectorDisplay extends AbstractDSpotDisplay {
 	@Override
 	public int getNumNewTestCases() {
 		return newTestCases.size();
+	}
+	
+	public double getInitialCoverage(){
+		return initialCovered/initialTotal;
+	}
+	
+	public double getAmplifiedCoverage(){
+		return amplifiedCovered/amplifiedTotal;
 	}
 
 }

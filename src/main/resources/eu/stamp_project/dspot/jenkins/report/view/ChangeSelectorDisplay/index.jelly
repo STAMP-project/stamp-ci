@@ -1,11 +1,11 @@
- <?jelly escape-by-default='true'?>
+<?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout"
 	xmlns:h="/lib/hudson">
 	<l:layout title="overview-layout" xmlns:jm="/eu/stamp_project/dspot/jenkins/tags"
 		css="/plugin/dspot-jenkins-plugin/css/style.css">
 		<st:include it="${it.build}" page="sidepanel.jelly" />
 		<l:main-panel>
-			<h1>${it.displayName} <a href="javaSource"><l:icon class="icon-document icon-xlg" tooltip="open file"/></a></h1>
+			<h1>${it.displayName} <a href="javaSource"><l:icon class="icon-document icon-xlg" tooltip="open containing folder"/></a></h1>
 			<p>Mutants Killed: ${it.killedAfter + it.killedBefore}
 				(${it.killedAfter} new mutants killed )
 			</p>
