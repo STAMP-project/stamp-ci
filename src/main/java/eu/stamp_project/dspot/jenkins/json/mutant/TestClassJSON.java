@@ -15,6 +15,10 @@ import eu.stamp_project.dspot.jenkins.utils.JsonRequired;
  */
 public class TestClassJSON implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6272923406186110973L;
 	@JsonRequired public int nbMutantKilledOriginally;
     public String name;
     public long nbOriginalTestCases;

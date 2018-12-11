@@ -1,7 +1,6 @@
 package eu.stamp_project.dspot.jenkins.report.view;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 import javax.servlet.ServletException;
 

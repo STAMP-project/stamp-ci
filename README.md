@@ -81,8 +81,9 @@ For detailed information on the options have a look at [DSpot documentation](htt
 Build your project. 
 DSpot will be run on the selected tests and the reports / amplified tests will be stored in the specified folder in your workspace.
 
-## Output
-A project dashboard and a build dashboard are created to display STAMP Tools reports.
+## Graphical Reports 
+A build dashboard is created to display STAMP DSpot reports.
+From the dashboard the user can directly access the content of the output forlder of DSpot.
 
 ### Build views
 
@@ -90,9 +91,8 @@ For each build, a menu item is created to show the detailed Report of the DSpot 
 
 ![Build dashboard](docs/img/build.PNG?raw=true "DSpot dashboard")
  
-The user can navigate through packages and classes to get detailed information on the amplification outcomes.
-
-Reports can change based on the Selector used. 
+If test cases are successfully amplified, the user can navigate the details of the test class, getting more information on the amplified test cases.
+Reports adapt based on the Selector used. 
 
 ![PIT selector](docs/img/mutant.PNG?raw=true "PIT Mutant selector view")
  

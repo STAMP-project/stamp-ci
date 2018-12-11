@@ -13,6 +13,10 @@ import eu.stamp_project.dspot.jenkins.utils.JsonRequired;
  */
 public class ProjectTimeJSON implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6985663602945573679L;
 	public Set<ClassTimeJSON> classTimes = new LinkedHashSet<>();
 	@JsonRequired
 	public String projectName;

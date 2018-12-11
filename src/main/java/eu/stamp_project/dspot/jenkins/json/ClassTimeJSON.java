@@ -11,7 +11,11 @@ import java.io.Serializable;
  */
 public class ClassTimeJSON implements Serializable {
 
-    public String fullQualifiedName;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6319392203628095756L;
+	public String fullQualifiedName;
     public long timeInMs;
 
     public ClassTimeJSON() {

@@ -14,7 +14,11 @@ import java.util.List;
  */
 public class TestCaseJSON implements Serializable {
 
-    public String name;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3511100565205359166L;
+	public String name;
     public int nbAssertionAdded;
     public int nbInputAdded;
     public int nbMutantKilled;

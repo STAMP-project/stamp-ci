@@ -11,7 +11,11 @@ import java.io.Serializable;
  */
 public class MutantJSON implements Serializable {
 
-    public String ID;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3166060523194702204L;
+	public String ID;
     public int lineNumber;
     public String locationMethod;
 
