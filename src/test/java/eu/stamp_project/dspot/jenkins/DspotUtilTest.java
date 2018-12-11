@@ -8,9 +8,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
 
-import eu.stamp_project.program.ConstantsProperties;
-import eu.stamp_project.testrunner.runner.test.TestRunner;
+
 import eu.stamp_project.utils.DSpotUtils;
+import eu.stamp_project.utils.program.ConstantsProperties;
 import hudson.model.FreeStyleProject;
 
 public class DspotUtilTest {
@@ -40,7 +40,7 @@ public class DspotUtilTest {
 	@Test
 	public void testReplacement() {
 		Properties init_properties = new Properties();
-		if (!TestRunner.FILE_SEPARATOR.equals("/"))
+		if (!File.separator.equals("/"))
 			init_properties.setProperty(ConstantsProperties.TEST_CLASSES.getName(),
 					ConstantsProperties.TEST_CLASSES.getDefaultValue().replaceAll("/", "\\\\"));
 		Assert.assertEquals("replacement ok", init_properties.getProperty(ConstantsProperties.TEST_CLASSES.getName()),

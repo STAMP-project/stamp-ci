@@ -1,0 +1,13 @@
+{
+  "classTimes": [
+    {
+      "fullQualifiedName": "eu.stamp_project.examples.dhell.HelloAppTest",
+      "timeInMs": 13779
+    },
+    {
+      "fullQualifiedName": "eu.stamp_project.examples.dhell.MyStorageTest",
+      "timeInMs": 11020
+    }
+  ],
+  "projectName": "dhell-pipe"
+}

@@ -1,0 +1,42 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout"
+	xmlns:h="/lib/hudson">
+	<l:layout title="overview-layout" xmlns:jm="/eu/stamp_project/dspot/jenkins/tags"
+		css="/plugin/dspot-jenkins-plugin/css/style.css">
+		<st:include it="${it.build}" page="sidepanel.jelly" />
+		<l:main-panel>
+			<h1>${it.displayName} <a href="javaSource"><l:icon class="icon-document icon-xlg" tooltip="open containing folder"/></a></h1>
+			<p>Mutants Killed: ${it.killedAfter + it.killedBefore}
+				(${it.killedAfter} new mutants killed )
+			</p>
+			<h2>New Test Cases</h2>
+			<j:forEach var="child" items="${it.newTestCases}">
+				<h3>${child.name}</h3>
+				<ul>
+					<li>${child.nbAssertionAdded} assertions added</li>
+					<li>${child.nbInputAdded} inputs added</li>
+					<li>${child.nbMutantKilled} more mutant(s) killed</li>
+				</ul>
+				<div class="center">
+					<table class="source" border="1">
+						<thead>
+							<th>ID</th>
+							<th>Line Number</th>
+							<th>Location Method</th>
+						</thead>
+						<tbody>
+							<j:forEach var="mut" items="${child.mutantsKilled}">
+								<tr class="center">
+									<td>${mut.ID}</td>
+									<td>${mut.lineNumber}</td>
+									<td>${mut.locationMethod}</td>
+								</tr>
+							</j:forEach>
+						</tbody>
+					</table>
+				</div>
+			</j:forEach>
+			<div class="padded center"><a href="javaSource"><l:icon class="icon-document icon-md"/> ${it.displayName}.java</a></div>
+		</l:main-panel>		
+	</l:layout>
+</j:jelly>

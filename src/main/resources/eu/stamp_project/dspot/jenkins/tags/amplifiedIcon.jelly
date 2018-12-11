@@ -1,0 +1,9 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout">
+	<j:if test="${it == 0}">
+		<l:icon class="icon-grey icon-sm"/>
+	</j:if>
+	<j:if test="${it > 0 }">
+		<l:icon class="icon-green icon-sm"/>
+	</j:if>
+</j:jelly>

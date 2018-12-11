@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -20,8 +21,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.stamp_project.dspot.DSpot;
-import eu.stamp_project.program.ConstantsProperties;
-import eu.stamp_project.program.InputConfiguration;
+import eu.stamp_project.dspot.amplifier.Amplifier;
+import eu.stamp_project.dspot.jenkins.report.DSpotResults;
+import eu.stamp_project.dspot.selector.TestSelector;
+import eu.stamp_project.utils.options.AmplifierEnum;
+import eu.stamp_project.utils.options.BudgetizerEnum;
+import eu.stamp_project.utils.options.SelectorEnum;
+import eu.stamp_project.utils.program.ConstantsProperties;
+import eu.stamp_project.utils.program.InputConfiguration;
 import hudson.Extension;
 import hudson.FilePath;
 import hudson.Launcher;
@@ -57,8 +64,24 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 	private String testFilter = DescriptorImpl.defaultTestFilter;
 	@Nonnull
 	private String outputDir = DescriptorImpl.defaultOutputDir;
+	@Nonnull
+	private String secondFolder = DescriptorImpl.defaultSecondFolder;
 
 	private boolean onlyChanges = false;
+	
+	private boolean showReports = true;
+
+	@Nonnull
+	private SelectorEnum selector = DescriptorImpl.defaultSelector;
+
+	@Nonnull
+	private BudgetizerEnum budgetizer = DescriptorImpl.defaultBudgetizer;
+
+	@Nonnull
+	private int numIterations = DescriptorImpl.defaultNumIterations;
+
+	@Nonnull
+	private List<AmplifierEnum> lAmplifiers = DescriptorImpl.defaultLAmplifiers;
 
 	private Properties init_properties;
 
@@ -99,9 +122,39 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 		return onlyChanges;
 	}
 
+	public boolean isShowReports() {
+		return showReports;
+	}
+	
+	public BudgetizerEnum getBudgetizer() {
+		return budgetizer;
+	}
+	
+	public String getSecondFolder() {
+		return secondFolder;
+	}
+	
+	public SelectorEnum getSelector() {
+		return selector;
+	}
+	
+	public List<AmplifierEnum> getlAmplifiers() {
+		return lAmplifiers;
+	}
+	
+	public int getNumIterations() {
+		return numIterations;
+	} 
+	
+	
 	@DataBoundSetter
 	public void setOnlyChanges(boolean onlyChanges) {
 		this.onlyChanges = onlyChanges;
+	}
+	
+	@DataBoundSetter
+	public void setShowReports(boolean showReports) {
+		this.showReports = showReports;
 	}
 
 	@DataBoundSetter
@@ -138,7 +191,32 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 	public void setTestFilter(@Nonnull String testFilter) {
 		this.testFilter = testFilter;
 	}
-
+	
+	@DataBoundSetter
+	public void setBudgetizer(@Nonnull BudgetizerEnum budgetizer) {
+		this.budgetizer = budgetizer;
+	}
+	
+	@DataBoundSetter
+	public void setSelector(@Nonnull SelectorEnum selector) {
+		this.selector = selector;
+	}
+	
+	@DataBoundSetter
+	public void setlAmplifiers(@Nonnull List<AmplifierEnum> lAmplifiers) {
+		this.lAmplifiers = lAmplifiers;
+	}
+	
+	@DataBoundSetter
+	public void setNumIterations(int numIterations) {
+		this.numIterations = numIterations;
+	}
+	
+	@DataBoundSetter
+	public void setSecondFolder(@Nonnull String secondFolder) {
+		this.secondFolder = secondFolder;
+	}
+	
 	@Override
 	public BuildStepMonitor getRequiredMonitorService() {
 		return BuildStepMonitor.NONE;
@@ -161,6 +239,9 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 		init_properties.setProperty(ConstantsProperties.SRC_CLASSES.getName(),
 				new FilePath(wsp, srcClasses).getRemote());
 
+		init_properties.setProperty(ConstantsProperties.PATH_TO_SECOND_VERSION.getName(),
+				new FilePath(wsp, secondFolder).getRemote());
+		
 		InputConfiguration.initialize(init_properties).setUseWorkingDirectory(true).setVerbose(true);
 
 		// analyze changes in workspace
@@ -206,13 +287,13 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 				listener.getLogger().println("could not get last changes. DSpot will run on the whole suite.");
 				onlyChanges = false;
 			}
-
 		}
 
-		try
-
-		{
-			DSpot dspot = new DSpot();
+		try	{
+			List<String> amplString = lAmplifiers.stream().map(a -> a.toString()).collect(Collectors.toList());
+			List<Amplifier> amplifiers = AmplifierEnum.buildAmplifiersFromString(amplString);
+			TestSelector testSelector = selector.buildSelector();
+			DSpot dspot = new DSpot(numIterations, amplifiers, testSelector, budgetizer);
 			InputConfiguration.get().getFactory().getEnvironment()
 					.setInputClassLoader(DspotStep.class.getClassLoader());
 			if (onlyChanges) {
@@ -225,6 +306,10 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 			LOGGER.error("Build Failed", e);
 			run.setResult(Result.UNSTABLE);
 		}
+
+		DSpotResults results = new DSpotResults(new FilePath(wsp, outputDir));
+		DSpotResultsAction action = new DSpotResultsAction(run, results);
+		run.addAction(action);
 		return;
 
 	}
@@ -241,6 +326,11 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 	@Extension
 	public static class DescriptorImpl extends BuildStepDescriptor<Builder> {
 
+		public static final String defaultSecondFolder = "";
+		public static final List<AmplifierEnum> defaultLAmplifiers = Collections.emptyList();
+		public static final SelectorEnum defaultSelector = SelectorEnum.PitMutantScoreSelector;
+		public static final int defaultNumIterations = 3;
+		public static final BudgetizerEnum defaultBudgetizer = BudgetizerEnum.NoBudgetizer;
 		public static final String defaultProjectPath = "";
 		public static final String defaultSrcCode = ConstantsProperties.SRC_CODE.getDefaultValue();
 		public static final String defaultTestCode = ConstantsProperties.TEST_SRC_CODE.getDefaultValue();
@@ -249,6 +339,7 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 		public static final String defaultTestFilter = ConstantsProperties.FILTER.getDefaultValue();
 		public static final String defaultOutputDir = "dspot-out";
 		public static final boolean defaultOnlyChanges = false;
+		public static final boolean defaultShowReports = true;
 
 		@Override
 		public String getDisplayName() {
