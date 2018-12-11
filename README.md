@@ -6,7 +6,7 @@ Both freestyle jobs and pipelines are supported.
 
 Developed in the context of [STAMP project](https://stamp.ow2.org/)
 
-## Latest release:
+## Latest release
 v.1.0.1-SNAPSHOT (DSpot 1.2.2-SNAPSHOT)
 
 ## Install
