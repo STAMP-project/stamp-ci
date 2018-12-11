@@ -11,7 +11,7 @@ install:
   - mvn clean compile -DskipTests -Dmaven.javadoc.skip=true -Dcheckstyle.failOnViolation=false -Denforcer.fail=false
 
 script:
-  - mvn package -DskipTests
+  - mvn package -DskipTests -Denforcer.fail=false
 
 before_deploy:
   - export RELEASE_FILE=$(ls target/*.hpi)
