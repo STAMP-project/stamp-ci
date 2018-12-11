@@ -7,7 +7,7 @@ Both freestyle jobs and pipelines are supported.
 Developed in the context of [STAMP project](https://stamp.ow2.org/)
 
 ## Latest release:
-* v.1.0.0 (DSpot 1.2.1)
+v.1.0.1-SNAPSHOT (DSpot 1.2.2-SNAPSHOT)
 
 ## Install
 * Install the plugin in Jenkins (for details on how to install a plugin see [here](https://jenkins.io/doc/book/managing/plugins/)).
