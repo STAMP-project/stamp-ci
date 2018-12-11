@@ -8,7 +8,7 @@ cache:
     - $HOME/.m2
     
 install:
-  - mvn clean compile -DskipTests -Dmaven.javadoc.skip=true -Dcheckstyle.skip=true
+  - mvn clean compile -DskipTests -Dmaven.javadoc.skip=true -Dcheckstyle.failOnViolation=false -Denforcer.fail=false
 
 script:
   - mvn package -DskipTests
