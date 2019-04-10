@@ -1,0 +1,24 @@
+ <?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:y="/lib/layout"
+	xmlns:l="/lib/hudson" xmlns:jm="/it/eng/stamp/tags"
+	css="/plugin/stamp-report-plugin/css/style.css">
+	<h4>
+		Mutator: ${it.mutator}
+		<jm:statusIcon it="${it.status}" />
+	</h4>
+		<p> Tests Run: ${it.testsRun}</p>
+	<h4>Tests:</h4>
+	<ul>
+		<j:forEach var="t" items="${it.tests}">
+			<j:choose>
+				<j:when	test="${t.equals(it.detectedBy)}">
+					<li><strong>${t}</strong></li>
+				</j:when>
+				<j:otherwise>
+					<li class="greyed">${t}</li>
+				</j:otherwise>
+			</j:choose>
+		</j:forEach>
+	</ul>
+
+</j:jelly>

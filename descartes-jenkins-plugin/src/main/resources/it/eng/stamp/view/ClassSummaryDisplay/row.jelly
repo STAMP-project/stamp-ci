@@ -1,0 +1,16 @@
+ <?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:y="/lib/layout"
+	xmlns:l="/lib/hudson" xmlns:jm="/it/eng/stamp/tags"
+	css="/plugin/stamp-report-plugin/css/style.css">
+		<tr>
+			<td>
+				<h4><a href="${it.parentUrl}/${it.urlName}">${it.displayName}</a></h4>
+			</td>
+			<td>
+				<div class="mprogress">
+					<l:progressBar pos="${it.mutationCoverage}" />
+				</div>
+				${it.mutationCoverage}% (${it.detectedCount}/${it.mutationCount})
+			</td>
+		</tr>
+</j:jelly>

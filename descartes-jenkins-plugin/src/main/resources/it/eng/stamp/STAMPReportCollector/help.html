@@ -1,0 +1,14 @@
+<div>
+    Descartes test results report in JSON format.
+    When this option is configured, Jenkins can provide useful information about mutation results
+
+    <p>
+        To use this feature, first set up your build to run Descartes. 
+        The plugin assumes that report files are saved in , then
+        specify the path to PIT-Descartes JSON files in target/pit-reports folder.
+        If needed you can overwrite this path using <a href="http://ant.apache.org/manual/Types/fileset.html">Ant glob syntax</a>,
+        such as <samp>**/target/pit-reports/*/mutations.json</samp>. Be sure not to include any non-report
+        files into this pattern. You can specify only one file pattern.
+   <p>
+        Once there are a few builds running with test results, you should start seeing some aggregated report.
+</div>

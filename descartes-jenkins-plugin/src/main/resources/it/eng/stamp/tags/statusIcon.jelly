@@ -1,0 +1,12 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout">
+	<j:if test="${it.toString().equals('KILLED')}">
+		<l:icon class="icon-green icon-sm" tooltip="KILLED"/>
+	</j:if>
+	<j:if test="${it.toString().equals('SURVIVED')}">
+		<l:icon class="icon-red icon-sm" tooltip="SURVIVED"/>
+	</j:if>
+	<j:if test="${it.toString().equals('NO_COVERAGE')}">
+		<l:icon class="icon-red icon-sm" tooltip="NO_COVERAGE"/>
+	</j:if>
+</j:jelly>

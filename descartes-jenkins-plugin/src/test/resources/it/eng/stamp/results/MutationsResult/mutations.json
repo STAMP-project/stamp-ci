@@ -1,0 +1,574 @@
+{
+	"methods": [
+		{
+			"name": "deleteFile",
+			"description": "(Ljava/lang/String;)V",
+			"class": "MyStorage",
+			"package": "eu/stamp_project/examples/dhell",
+			"tests": [
+				"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppInt(eu.stamp_project.examples.dhell.HelloAppTest)",
+				"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun2(eu.stamp_project.examples.dhell.HelloAppTest)",
+				"eu.stamp_project.examples.dhell.MyStorageTest.testMyStorageString(eu.stamp_project.examples.dhell.MyStorageTest)",
+				"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppString(eu.stamp_project.examples.dhell.HelloAppTest)",
+				"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun3(eu.stamp_project.examples.dhell.HelloAppTest)",
+				"eu.stamp_project.examples.dhell.MyStorageTest.testSaveReadData(eu.stamp_project.examples.dhell.MyStorageTest)",
+				"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppIntString(eu.stamp_project.examples.dhell.HelloAppTest)",
+				"eu.stamp_project.examples.dhell.MyStorageTest.testMyStorageDefault(eu.stamp_project.examples.dhell.MyStorageTest)",
+				"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppDefault(eu.stamp_project.examples.dhell.HelloAppTest)",
+				"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun1(eu.stamp_project.examples.dhell.HelloAppTest)"
+			],
+			"detected": [
+				"void"
+			],
+			"not-detected": [],
+			"classification": "tested",
+			"mutations": [
+				{
+					"status": "KILLED",
+					"mutator": "void",
+					"tests-run": 4,
+					"detected-by": "eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppInt(eu.stamp_project.examples.dhell.HelloAppTest)",
+					"tests": [
+						"eu.stamp_project.examples.dhell.MyStorageTest.testMyStorageDefault(eu.stamp_project.examples.dhell.MyStorageTest)",
+						"eu.stamp_project.examples.dhell.MyStorageTest.testMyStorageString(eu.stamp_project.examples.dhell.MyStorageTest)",
+						"eu.stamp_project.examples.dhell.MyStorageTest.testSaveReadData(eu.stamp_project.examples.dhell.MyStorageTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppInt(eu.stamp_project.examples.dhell.HelloAppTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppIntString(eu.stamp_project.examples.dhell.HelloAppTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppString(eu.stamp_project.examples.dhell.HelloAppTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun2(eu.stamp_project.examples.dhell.HelloAppTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun1(eu.stamp_project.examples.dhell.HelloAppTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun3(eu.stamp_project.examples.dhell.HelloAppTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppDefault(eu.stamp_project.examples.dhell.HelloAppTest)"
+					]
+				}
+			]
+		},
+		{
+			"name": "delData",
+			"description": "(Ljava/lang/String;)V",
+			"class": "MyStorage",
+			"package": "eu/stamp_project/examples/dhell",
+			"tests": [],
+			"detected": [],
+			"not-detected": [
+				"void"
+			],
+			"classification": "not-covered",
+			"mutations": [
+				{
+					"status": "NO_COVERAGE",
+					"mutator": "void",
+					"tests-run": 0,
+					"detected-by": null,
+					"tests": []
+				}
+			]
+		},
+		{
+			"name": "isEqual",
+			"description": "(Leu/stamp_project/examples/dhell/MyStorage;)Z",
+			"class": "MyStorage",
+			"package": "eu/stamp_project/examples/dhell",
+			"tests": [
+				"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun2(eu.stamp_project.examples.dhell.HelloAppTest)",
+				"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun3(eu.stamp_project.examples.dhell.HelloAppTest)",
+				"eu.stamp_project.examples.dhell.MyStorageTest.testSaveReadData(eu.stamp_project.examples.dhell.MyStorageTest)",
+				"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun1(eu.stamp_project.examples.dhell.HelloAppTest)"
+			],
+			"detected": [
+				"false"
+			],
+			"not-detected": [
+				"true"
+			],
+			"classification": "partially-tested",
+			"mutations": [
+				{
+					"status": "KILLED",
+					"mutator": "false",
+					"tests-run": 1,
+					"detected-by": "eu.stamp_project.examples.dhell.MyStorageTest.testSaveReadData(eu.stamp_project.examples.dhell.MyStorageTest)",
+					"tests": [
+						"eu.stamp_project.examples.dhell.MyStorageTest.testSaveReadData(eu.stamp_project.examples.dhell.MyStorageTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun2(eu.stamp_project.examples.dhell.HelloAppTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun1(eu.stamp_project.examples.dhell.HelloAppTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun3(eu.stamp_project.examples.dhell.HelloAppTest)"
+					]
+				},
+				{
+					"status": "SURVIVED",
+					"mutator": "true",
+					"tests-run": 4,
+					"detected-by": null,
+					"tests": [
+						"eu.stamp_project.examples.dhell.MyStorageTest.testSaveReadData(eu.stamp_project.examples.dhell.MyStorageTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun2(eu.stamp_project.examples.dhell.HelloAppTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun1(eu.stamp_project.examples.dhell.HelloAppTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun3(eu.stamp_project.examples.dhell.HelloAppTest)"
+					]
+				}
+			]
+		},
+		{
+			"name": "getDataSize",
+			"description": "()I",
+			"class": "MyStorage",
+			"package": "eu/stamp_project/examples/dhell",
+			"tests": [
+				"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun2(eu.stamp_project.examples.dhell.HelloAppTest)",
+				"eu.stamp_project.examples.dhell.MyStorageTest.testMyStorageString(eu.stamp_project.examples.dhell.MyStorageTest)",
+				"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun3(eu.stamp_project.examples.dhell.HelloAppTest)",
+				"eu.stamp_project.examples.dhell.MyStorageTest.testAddData(eu.stamp_project.examples.dhell.MyStorageTest)",
+				"eu.stamp_project.examples.dhell.MyStorageTest.testSaveReadData(eu.stamp_project.examples.dhell.MyStorageTest)",
+				"eu.stamp_project.examples.dhell.MyStorageTest.testMyStorageDefault(eu.stamp_project.examples.dhell.MyStorageTest)",
+				"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun1(eu.stamp_project.examples.dhell.HelloAppTest)"
+			],
+			"detected": [
+				"0",
+				"1"
+			],
+			"not-detected": [],
+			"classification": "tested",
+			"mutations": [
+				{
+					"status": "KILLED",
+					"mutator": "0",
+					"tests-run": 3,
+					"detected-by": "eu.stamp_project.examples.dhell.MyStorageTest.testAddData(eu.stamp_project.examples.dhell.MyStorageTest)",
+					"tests": [
+						"eu.stamp_project.examples.dhell.MyStorageTest.testMyStorageDefault(eu.stamp_project.examples.dhell.MyStorageTest)",
+						"eu.stamp_project.examples.dhell.MyStorageTest.testMyStorageString(eu.stamp_project.examples.dhell.MyStorageTest)",
+						"eu.stamp_project.examples.dhell.MyStorageTest.testAddData(eu.stamp_project.examples.dhell.MyStorageTest)",
+						"eu.stamp_project.examples.dhell.MyStorageTest.testSaveReadData(eu.stamp_project.examples.dhell.MyStorageTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun2(eu.stamp_project.examples.dhell.HelloAppTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun1(eu.stamp_project.examples.dhell.HelloAppTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun3(eu.stamp_project.examples.dhell.HelloAppTest)"
+					]
+				},
+				{
+					"status": "KILLED",
+					"mutator": "1",
+					"tests-run": 1,
+					"detected-by": "eu.stamp_project.examples.dhell.MyStorageTest.testMyStorageDefault(eu.stamp_project.examples.dhell.MyStorageTest)",
+					"tests": [
+						"eu.stamp_project.examples.dhell.MyStorageTest.testMyStorageDefault(eu.stamp_project.examples.dhell.MyStorageTest)",
+						"eu.stamp_project.examples.dhell.MyStorageTest.testMyStorageString(eu.stamp_project.examples.dhell.MyStorageTest)",
+						"eu.stamp_project.examples.dhell.MyStorageTest.testAddData(eu.stamp_project.examples.dhell.MyStorageTest)",
+						"eu.stamp_project.examples.dhell.MyStorageTest.testSaveReadData(eu.stamp_project.examples.dhell.MyStorageTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun2(eu.stamp_project.examples.dhell.HelloAppTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun1(eu.stamp_project.examples.dhell.HelloAppTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun3(eu.stamp_project.examples.dhell.HelloAppTest)"
+					]
+				}
+			]
+		},
+		{
+			"name": "readData",
+			"description": "()V",
+			"class": "MyStorage",
+			"package": "eu/stamp_project/examples/dhell",
+			"tests": [
+				"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun2(eu.stamp_project.examples.dhell.HelloAppTest)",
+				"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun3(eu.stamp_project.examples.dhell.HelloAppTest)",
+				"eu.stamp_project.examples.dhell.MyStorageTest.testSaveReadData(eu.stamp_project.examples.dhell.MyStorageTest)",
+				"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun1(eu.stamp_project.examples.dhell.HelloAppTest)"
+			],
+			"detected": [
+				"void"
+			],
+			"not-detected": [],
+			"classification": "tested",
+			"mutations": [
+				{
+					"status": "KILLED",
+					"mutator": "void",
+					"tests-run": 1,
+					"detected-by": "eu.stamp_project.examples.dhell.MyStorageTest.testSaveReadData(eu.stamp_project.examples.dhell.MyStorageTest)",
+					"tests": [
+						"eu.stamp_project.examples.dhell.MyStorageTest.testSaveReadData(eu.stamp_project.examples.dhell.MyStorageTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun2(eu.stamp_project.examples.dhell.HelloAppTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun1(eu.stamp_project.examples.dhell.HelloAppTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun3(eu.stamp_project.examples.dhell.HelloAppTest)"
+					]
+				}
+			]
+		},
+		{
+			"name": "addData",
+			"description": "(Ljava/lang/String;)V",
+			"class": "MyStorage",
+			"package": "eu/stamp_project/examples/dhell",
+			"tests": [
+				"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun2(eu.stamp_project.examples.dhell.HelloAppTest)",
+				"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun3(eu.stamp_project.examples.dhell.HelloAppTest)",
+				"eu.stamp_project.examples.dhell.MyStorageTest.testAddData(eu.stamp_project.examples.dhell.MyStorageTest)",
+				"eu.stamp_project.examples.dhell.MyStorageTest.testSaveReadData(eu.stamp_project.examples.dhell.MyStorageTest)",
+				"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun1(eu.stamp_project.examples.dhell.HelloAppTest)"
+			],
+			"detected": [
+				"void"
+			],
+			"not-detected": [],
+			"classification": "tested",
+			"mutations": [
+				{
+					"status": "KILLED",
+					"mutator": "void",
+					"tests-run": 1,
+					"detected-by": "eu.stamp_project.examples.dhell.MyStorageTest.testAddData(eu.stamp_project.examples.dhell.MyStorageTest)",
+					"tests": [
+						"eu.stamp_project.examples.dhell.MyStorageTest.testAddData(eu.stamp_project.examples.dhell.MyStorageTest)",
+						"eu.stamp_project.examples.dhell.MyStorageTest.testSaveReadData(eu.stamp_project.examples.dhell.MyStorageTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun2(eu.stamp_project.examples.dhell.HelloAppTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun1(eu.stamp_project.examples.dhell.HelloAppTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun3(eu.stamp_project.examples.dhell.HelloAppTest)"
+					]
+				}
+			]
+		},
+		{
+			"name": "dataAreEqual",
+			"description": "(Ljava/util/ArrayList;)Z",
+			"class": "MyStorage",
+			"package": "eu/stamp_project/examples/dhell",
+			"tests": [
+				"eu.stamp_project.examples.dhell.MyStorageTest.testAddData(eu.stamp_project.examples.dhell.MyStorageTest)",
+				"eu.stamp_project.examples.dhell.MyStorageTest.testSaveReadData(eu.stamp_project.examples.dhell.MyStorageTest)"
+			],
+			"detected": [
+				"false"
+			],
+			"not-detected": [
+				"true"
+			],
+			"classification": "partially-tested",
+			"mutations": [
+				{
+					"status": "KILLED",
+					"mutator": "false",
+					"tests-run": 1,
+					"detected-by": "eu.stamp_project.examples.dhell.MyStorageTest.testAddData(eu.stamp_project.examples.dhell.MyStorageTest)",
+					"tests": [
+						"eu.stamp_project.examples.dhell.MyStorageTest.testAddData(eu.stamp_project.examples.dhell.MyStorageTest)",
+						"eu.stamp_project.examples.dhell.MyStorageTest.testSaveReadData(eu.stamp_project.examples.dhell.MyStorageTest)"
+					]
+				},
+				{
+					"status": "SURVIVED",
+					"mutator": "true",
+					"tests-run": 2,
+					"detected-by": null,
+					"tests": [
+						"eu.stamp_project.examples.dhell.MyStorageTest.testAddData(eu.stamp_project.examples.dhell.MyStorageTest)",
+						"eu.stamp_project.examples.dhell.MyStorageTest.testSaveReadData(eu.stamp_project.examples.dhell.MyStorageTest)"
+					]
+				}
+			]
+		},
+		{
+			"name": "getData",
+			"description": "(I)Ljava/lang/String;",
+			"class": "MyStorage",
+			"package": "eu/stamp_project/examples/dhell",
+			"tests": [
+				"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun2(eu.stamp_project.examples.dhell.HelloAppTest)",
+				"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun3(eu.stamp_project.examples.dhell.HelloAppTest)",
+				"eu.stamp_project.examples.dhell.MyStorageTest.testAddData(eu.stamp_project.examples.dhell.MyStorageTest)",
+				"eu.stamp_project.examples.dhell.MyStorageTest.testSaveReadData(eu.stamp_project.examples.dhell.MyStorageTest)",
+				"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun1(eu.stamp_project.examples.dhell.HelloAppTest)"
+			],
+			"detected": [
+				"\"\"",
+				"\"A\"",
+				"null"
+			],
+			"not-detected": [],
+			"classification": "tested",
+			"mutations": [
+				{
+					"status": "KILLED",
+					"mutator": "\"\"",
+					"tests-run": 1,
+					"detected-by": "eu.stamp_project.examples.dhell.MyStorageTest.testAddData(eu.stamp_project.examples.dhell.MyStorageTest)",
+					"tests": [
+						"eu.stamp_project.examples.dhell.MyStorageTest.testAddData(eu.stamp_project.examples.dhell.MyStorageTest)",
+						"eu.stamp_project.examples.dhell.MyStorageTest.testSaveReadData(eu.stamp_project.examples.dhell.MyStorageTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun2(eu.stamp_project.examples.dhell.HelloAppTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun1(eu.stamp_project.examples.dhell.HelloAppTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun3(eu.stamp_project.examples.dhell.HelloAppTest)"
+					]
+				},
+				{
+					"status": "KILLED",
+					"mutator": "\"A\"",
+					"tests-run": 1,
+					"detected-by": "eu.stamp_project.examples.dhell.MyStorageTest.testAddData(eu.stamp_project.examples.dhell.MyStorageTest)",
+					"tests": [
+						"eu.stamp_project.examples.dhell.MyStorageTest.testAddData(eu.stamp_project.examples.dhell.MyStorageTest)",
+						"eu.stamp_project.examples.dhell.MyStorageTest.testSaveReadData(eu.stamp_project.examples.dhell.MyStorageTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun2(eu.stamp_project.examples.dhell.HelloAppTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun1(eu.stamp_project.examples.dhell.HelloAppTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun3(eu.stamp_project.examples.dhell.HelloAppTest)"
+					]
+				},
+				{
+					"status": "KILLED",
+					"mutator": "null",
+					"tests-run": 1,
+					"detected-by": "eu.stamp_project.examples.dhell.MyStorageTest.testAddData(eu.stamp_project.examples.dhell.MyStorageTest)",
+					"tests": [
+						"eu.stamp_project.examples.dhell.MyStorageTest.testAddData(eu.stamp_project.examples.dhell.MyStorageTest)",
+						"eu.stamp_project.examples.dhell.MyStorageTest.testSaveReadData(eu.stamp_project.examples.dhell.MyStorageTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun2(eu.stamp_project.examples.dhell.HelloAppTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun1(eu.stamp_project.examples.dhell.HelloAppTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun3(eu.stamp_project.examples.dhell.HelloAppTest)"
+					]
+				}
+			]
+		},
+		{
+			"name": "saveData",
+			"description": "()V",
+			"class": "MyStorage",
+			"package": "eu/stamp_project/examples/dhell",
+			"tests": [
+				"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun2(eu.stamp_project.examples.dhell.HelloAppTest)",
+				"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun3(eu.stamp_project.examples.dhell.HelloAppTest)",
+				"eu.stamp_project.examples.dhell.MyStorageTest.testSaveReadData(eu.stamp_project.examples.dhell.MyStorageTest)",
+				"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun1(eu.stamp_project.examples.dhell.HelloAppTest)"
+			],
+			"detected": [
+				"void"
+			],
+			"not-detected": [],
+			"classification": "tested",
+			"mutations": [
+				{
+					"status": "KILLED",
+					"mutator": "void",
+					"tests-run": 1,
+					"detected-by": "eu.stamp_project.examples.dhell.MyStorageTest.testSaveReadData(eu.stamp_project.examples.dhell.MyStorageTest)",
+					"tests": [
+						"eu.stamp_project.examples.dhell.MyStorageTest.testSaveReadData(eu.stamp_project.examples.dhell.MyStorageTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun2(eu.stamp_project.examples.dhell.HelloAppTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun1(eu.stamp_project.examples.dhell.HelloAppTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun3(eu.stamp_project.examples.dhell.HelloAppTest)"
+					]
+				}
+			]
+		},
+		{
+			"name": "cardMyTraces",
+			"description": "()I",
+			"class": "HelloApp",
+			"package": "eu/stamp_project/examples/dhell",
+			"tests": [
+				"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppInt(eu.stamp_project.examples.dhell.HelloAppTest)",
+				"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppString(eu.stamp_project.examples.dhell.HelloAppTest)",
+				"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppIntString(eu.stamp_project.examples.dhell.HelloAppTest)",
+				"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppDefault(eu.stamp_project.examples.dhell.HelloAppTest)"
+			],
+			"detected": [
+				"1"
+			],
+			"not-detected": [
+				"0"
+			],
+			"classification": "partially-tested",
+			"mutations": [
+				{
+					"status": "SURVIVED",
+					"mutator": "0",
+					"tests-run": 4,
+					"detected-by": null,
+					"tests": [
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppInt(eu.stamp_project.examples.dhell.HelloAppTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppIntString(eu.stamp_project.examples.dhell.HelloAppTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppString(eu.stamp_project.examples.dhell.HelloAppTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppDefault(eu.stamp_project.examples.dhell.HelloAppTest)"
+					]
+				},
+				{
+					"status": "KILLED",
+					"mutator": "1",
+					"tests-run": 1,
+					"detected-by": "eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppInt(eu.stamp_project.examples.dhell.HelloAppTest)",
+					"tests": [
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppInt(eu.stamp_project.examples.dhell.HelloAppTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppIntString(eu.stamp_project.examples.dhell.HelloAppTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppString(eu.stamp_project.examples.dhell.HelloAppTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppDefault(eu.stamp_project.examples.dhell.HelloAppTest)"
+					]
+				}
+			]
+		},
+		{
+			"name": "run",
+			"description": "()V",
+			"class": "HelloApp",
+			"package": "eu/stamp_project/examples/dhell",
+			"tests": [
+				"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun2(eu.stamp_project.examples.dhell.HelloAppTest)",
+				"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun3(eu.stamp_project.examples.dhell.HelloAppTest)",
+				"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun1(eu.stamp_project.examples.dhell.HelloAppTest)"
+			],
+			"detected": [
+				"void"
+			],
+			"not-detected": [],
+			"classification": "tested",
+			"mutations": [
+				{
+					"status": "KILLED",
+					"mutator": "void",
+					"tests-run": 1,
+					"detected-by": "eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun2(eu.stamp_project.examples.dhell.HelloAppTest)",
+					"tests": [
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun2(eu.stamp_project.examples.dhell.HelloAppTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun1(eu.stamp_project.examples.dhell.HelloAppTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun3(eu.stamp_project.examples.dhell.HelloAppTest)"
+					]
+				}
+			]
+		},
+		{
+			"name": "myPrint",
+			"description": "(Ljava/lang/String;)V",
+			"class": "HelloApp",
+			"package": "eu/stamp_project/examples/dhell",
+			"tests": [
+				"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun2(eu.stamp_project.examples.dhell.HelloAppTest)",
+				"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun3(eu.stamp_project.examples.dhell.HelloAppTest)",
+				"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun1(eu.stamp_project.examples.dhell.HelloAppTest)"
+			],
+			"detected": [
+				"void"
+			],
+			"not-detected": [],
+			"classification": "tested",
+			"mutations": [
+				{
+					"status": "KILLED",
+					"mutator": "void",
+					"tests-run": 3,
+					"detected-by": "eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun3(eu.stamp_project.examples.dhell.HelloAppTest)",
+					"tests": [
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun2(eu.stamp_project.examples.dhell.HelloAppTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun1(eu.stamp_project.examples.dhell.HelloAppTest)",
+						"eu.stamp_project.examples.dhell.HelloAppTest.testHelloAppRun3(eu.stamp_project.examples.dhell.HelloAppTest)"
+					]
+				}
+			]
+		},
+		{
+			"name": "main",
+			"description": "([Ljava/lang/String;)V",
+			"class": "MyGod",
+			"package": "eu/stamp_project/examples/dhell",
+			"tests": [],
+			"detected": [],
+			"not-detected": [
+				"void"
+			],
+			"classification": "not-covered",
+			"mutations": [
+				{
+					"status": "NO_COVERAGE",
+					"mutator": "void",
+					"tests-run": 0,
+					"detected-by": null,
+					"tests": []
+				}
+			]
+		},
+		{
+			"name": "printHelp",
+			"description": "()V",
+			"class": "MyGod",
+			"package": "eu/stamp_project/examples/dhell",
+			"tests": [],
+			"detected": [],
+			"not-detected": [
+				"void"
+			],
+			"classification": "not-covered",
+			"mutations": [
+				{
+					"status": "NO_COVERAGE",
+					"mutator": "void",
+					"tests-run": 0,
+					"detected-by": null,
+					"tests": []
+				}
+			]
+		},
+		{
+			"name": "stringToLevel",
+			"description": "(Ljava/lang/String;)Ljava/util/logging/Level;",
+			"class": "MyLogger",
+			"package": "eu/stamp_project/examples/dhell",
+			"tests": [],
+			"detected": [],
+			"not-detected": [
+				"null"
+			],
+			"classification": "not-covered",
+			"mutations": [
+				{
+					"status": "NO_COVERAGE",
+					"mutator": "null",
+					"tests-run": 0,
+					"detected-by": null,
+					"tests": []
+				}
+			]
+		},
+		{
+			"name": "initLogs",
+			"description": "(Ljava/lang/String;)V",
+			"class": "MyLogger",
+			"package": "eu/stamp_project/examples/dhell",
+			"tests": [],
+			"detected": [],
+			"not-detected": [
+				"void"
+			],
+			"classification": "not-covered",
+			"mutations": [
+				{
+					"status": "NO_COVERAGE",
+					"mutator": "void",
+					"tests-run": 0,
+					"detected-by": null,
+					"tests": []
+				}
+			]
+		}
+	],
+	"analysis": {
+		"time": 4064,
+		"mutators": [
+			"void",
+			"null",
+			"true",
+			"false",
+			"empty",
+			"0",
+			"1",
+			"(byte)0",
+			"(byte)1",
+			"(short)1",
+			"(short)2",
+			"0L",
+			"1L",
+			"0.0",
+			"1.0",
+			"0.0f",
+			"1.0f",
+			"'\\40'",
+			"'A'",
+			"\"\"",
+			"\"A\""
+		]
+	}
+}

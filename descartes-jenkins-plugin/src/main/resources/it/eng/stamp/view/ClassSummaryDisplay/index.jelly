@@ -1,0 +1,44 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout">
+	<l:layout title="overview-layout" xmlns:jm="/it/eng/stamp/tags"
+		css="/plugin/stamp-report-plugin/css/style.css">
+		<st:include it="${it.build}" page="sidepanel.jelly" />
+		<l:main-panel>
+			<h3>Package ${it.parentName}</h3>
+			<h3>Class ${it.displayName} - Mutation Coverage
+				${it.mutationCoverage} % </h3>
+			<j:set var="methods" value="${it.children}"></j:set>
+			<table width="100%" class="source" border="1">
+				<thead>
+					<th>Method</th>
+					<th style="width: 30%;">Classification</th>
+					<th style="width: 10%;">Details</th>
+				</thead>
+				<tbody>
+					<j:forEach var="method" items="${methods}">
+						<tr>
+							<td class="center">${method.displayName}</td>
+							<td class="center">
+								<jm:classificationIcon it="${method.classification.toString()}"/>
+							</td>
+							<td class="center">
+								<a href="#${method.displayName}">
+									<l:icon class="icon-search icon-sm" />
+								</a>
+							</td>
+						</tr>
+					</j:forEach>
+				</tbody>
+			</table>
+			<j:forEach var="method" items="${methods}">
+			<j:set var="r" value="${method.result}"></j:set>
+			<div id="${method.displayName}"></div>
+				<h3>${method.displayName} - ${r.description}</h3>
+				<j:forEach var="mutation" items="${r.mutations}">
+				<st:include page="summary.jelly" from="${mutation}"
+						it="${mutation}"></st:include>
+				</j:forEach>
+			</j:forEach>
+		</l:main-panel>
+	</l:layout>
+</j:jelly>

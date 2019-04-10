@@ -1,0 +1,25 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout">
+	<l:layout title="trendlayout" css="/plugin/stamp-report-plugin/css/style.css">
+		<st:include it="${it.project}" page="sidepanel.jelly" />
+		<l:main-panel>
+			<h1>STAMP Reports: Build Trends</h1>
+			<h2>Descartes</h2>
+			<div>
+				<center>
+					<j:forEach var="metricKey" items="${it.metricsList}">
+						<img class="trend"
+							src="./summarizerGraphForMetric?metricDataKey=${metricKey}"
+							width="50%" />
+					</j:forEach>
+				</center>
+			</div>
+			<div>
+				<a href="../lastCompletedBuild/stamp-dashboard/">
+					Last Report
+					<l:icon class="icon-search icon-sm" />
+				</a>
+			</div>
+		</l:main-panel>
+	</l:layout>
+</j:jelly>

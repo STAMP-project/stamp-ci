@@ -1,0 +1,13 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core">
+	<j:if test="${from.isTrendVisibleOnProjectDashboard()}">
+		<div class="test-trend-caption">
+			STAMP Reports: Descartes
+		</div>
+		<center>
+			<img class="trend" src="stamp-dashboard/summarizerGraphCoverage" />
+			<br />
+			<a href="stamp-dashboard/">Show details</a>
+		</center>
+	</j:if>
+</j:jelly>

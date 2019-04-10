@@ -1,0 +1,31 @@
+ <?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:h="/lib/hudson"
+	xmlns:l="/lib/layout" xmlns:jm="/it/eng/stamp/tags"
+	css="/plugin/stamp-report-plugin/css/style.css">
+	<div>
+		<h3>
+			<a href="${it.urlName}">
+				${it.displayName}
+				<l:icon class="icon-package icon-sm" />
+			</a>
+		</h3>
+<p>		Mutation coverage: ${it.mutationCoverage}%</p>
+		<div class="padded">
+		<table class="mini">
+			<thead>
+				<th width="30%">
+					Classes
+				</th>
+				<th>
+					Mutation Coverage
+				</th>
+			</thead>
+			<tbody>
+			<j:forEach var="child" items="${it.children}">
+			<st:include page="row.jelly" from="${child}" it="${child}"></st:include>
+		</j:forEach>
+			</tbody>
+		</table>
+		</div>
+	</div>
+</j:jelly>

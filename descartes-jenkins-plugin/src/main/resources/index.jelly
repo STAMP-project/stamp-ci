@@ -1,0 +1,4 @@
+<?jelly escape-by-default='true'?>
+<div>
+    This plugin allows to view structured reports from Descartes mutations.
+</div>

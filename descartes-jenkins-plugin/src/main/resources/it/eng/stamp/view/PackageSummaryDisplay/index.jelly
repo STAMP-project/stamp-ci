@@ -1,0 +1,39 @@
+ <?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout"
+	xmlns:h="/lib/hudson">
+	<l:layout title="overview-layout" xmlns:jm="/it/eng/stamp/tags"
+		css="/plugin/stamp-report-plugin/css/style.css">
+		<st:include it="${it.build}" page="sidepanel.jelly" />
+		<l:main-panel>
+			<h2>Package Details for ${it.displayName}</h2>
+			<p>Mutation Coverage: ${it.mutationCoverage}%</p>
+			<table width="100%" class="source" border="1">
+				<thead>
+					<th>Class Name</th>
+					<th>Mutation Coverage</th>
+					<th>Show Details</th>
+				</thead>
+				<tbody>
+					<j:forEach var="child" items="${it.children}">
+						<tr class="center">
+							<td>${child.displayName}</td>
+							<td>
+								<table width="100%">
+									<tr><td>${child.detectedCount} / ${child.mutationCount}</td></tr>
+									<tr><td class="mini">
+										<h:progressBar pos="${child.mutationCoverage*100}" /></td>
+									</tr>
+								</table>
+							</td>
+							<td>
+								<a href="${child.urlName}">
+									<l:icon class="icon-search icon-sm" />
+								</a>
+							</td>
+						</tr>
+					</j:forEach>
+				</tbody>
+			</table>
+		</l:main-panel>
+	</l:layout>
+</j:jelly>
