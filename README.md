@@ -11,3 +11,7 @@ A Jenkins Freestyle plugin
 ## descartes-jenkins-plugin
 
 ## stamp-jenkins-cookbooks
+
+## jenkins-clover-coverage
+
+Jenkins pipeline to generate Clover reports + script to compare results
