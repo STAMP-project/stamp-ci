@@ -21,7 +21,7 @@ public abstract class AbstractMutationDisplay implements ModelObject {
 	private String name;
 	private AbstractMutationDisplay parent;
 	protected transient int mutationCount = 0;
-	protected transient int detectedCount= 0;
+	protected transient int detectedCount = 0;
 	protected transient int notDetectedCount = 0;
 	private transient STAMPReportBuildAction buildAction;
 	private DescartesReport currentReport;
@@ -29,8 +29,8 @@ public abstract class AbstractMutationDisplay implements ModelObject {
 	public AbstractMutationDisplay(AbstractMutationDisplay parent, String name, STAMPReportBuildAction action) {
 		this.buildAction = action;
 		currentReport = this.buildAction.getDescartesReport();
-		this.parent= parent;
-		this.name= name;
+		this.parent = parent;
+		this.name = name;
 		tally();
 		compute();
 	}
@@ -42,7 +42,7 @@ public abstract class AbstractMutationDisplay implements ModelObject {
 	public String getParentUrl() {
 		return getParent().getUrlName();
 	}
-	
+
 	private AbstractMutationDisplay getParent() {
 		return parent;
 	}
@@ -69,9 +69,9 @@ public abstract class AbstractMutationDisplay implements ModelObject {
 	}
 
 	public long getMutationCoverage() {
-		return 	Constants.percent(detectedCount,mutationCount);
+		return Constants.percent(detectedCount, mutationCount);
 	}
-	
+
 	public int getDetectedCount() {
 		return detectedCount;
 	}
@@ -91,7 +91,7 @@ public abstract class AbstractMutationDisplay implements ModelObject {
 	protected String getAncestorName() {
 		return getParent().getParentName();
 	}
-	
+
 	protected void compute() {
 		for (AbstractMutationDisplay m : getChildren()) {
 			mutationCount += m.getMutationCount();
@@ -106,10 +106,10 @@ public abstract class AbstractMutationDisplay implements ModelObject {
 	 */
 	protected abstract void tally();
 
-	public String getUrlName(){
+	public String getUrlName() {
 		return Constants.safe(getName());
 	}
-	
+
 	public Object getDynamic(String token, StaplerRequest req, StaplerResponse rsp) {
 		if (token.equals(getUrlName())) {
 			return this;
@@ -117,23 +117,21 @@ public abstract class AbstractMutationDisplay implements ModelObject {
 		AbstractMutationDisplay result = getChildByName(token);
 		if (result != null) {
 			return result;
-		}
-		else {
+		} else {
 			return null;
 		}
 	}
 
 	public AbstractBuild<?, ?> getBuild() {
-		 return buildAction.getBuild();
+		return buildAction.getBuild();
 	}
 
 	public DescartesReport getDescartesReport() {
 		return currentReport;
 	}
-	
+
 	protected STAMPReportBuildAction getBuildAction() {
 		return buildAction;
 	}
-
 
 }

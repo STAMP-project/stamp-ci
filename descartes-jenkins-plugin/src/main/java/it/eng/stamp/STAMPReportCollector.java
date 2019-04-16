@@ -115,7 +115,8 @@ public class STAMPReportCollector extends Recorder {
 		STAMPReportBuildAction buildAction = new STAMPReportBuildAction(build, report);
 		build.addAction(buildAction);
 
-		int buildCoverage = (int) Constants.toPercent(report.getAverageForMetric(ReportMetrics.COVERAGE));;
+		int buildCoverage = (int) Constants.toPercent(report.getAverageForMetric(ReportMetrics.COVERAGE));
+		;
 
 		if (treshold > 0 && (buildCoverage < treshold)) {
 			Result result = Result.UNSTABLE;

@@ -142,10 +142,11 @@ public class DescartesReport implements Serializable {
 		initTransient();
 		for (MethodResult m : methods) {
 			if (!indexed.containsKey(m.getPakg())) {
-				indexed.put(m.getPakg(), new HashMap<>());
+				indexed.put(m.getPakg(), new HashMap<String, Map<String, MethodResult>>());
 			}
-			if (!indexed.get(m.getPakg()).containsKey(m.getClassName()))
-				indexed.get(m.getPakg()).put(m.getClassName(), new HashMap<>());
+			if (!indexed.get(m.getPakg()).containsKey(m.getClassName())) {
+				indexed.get(m.getPakg()).put(m.getClassName(), new HashMap<String, MethodResult>());
+			}				
 			indexed.get(m.getPakg()).get(m.getClassName()).put(m.getName(), m);
 
 			mutationCount += m.getMutations().size();
@@ -153,7 +154,7 @@ public class DescartesReport implements Serializable {
 			notDetectedCount += m.getNotDetected().size();
 			counts.compute(m.getClassification(), (k, v) -> (v == null) ? 1 : ++v);
 		}
-		
+
 		metricsByKey.put(ReportMetrics.COVERAGE, Constants.divide(detectedCount, mutationCount));
 		metricsByKey.put(ReportMetrics.PARTIALLY_TESTED,
 				Constants.divide(counts.getOrDefault(MethodClassification.PARTIALLY_TESTED, 0), methods.size()));

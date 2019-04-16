@@ -5,7 +5,6 @@ import java.util.Collection;
 
 import com.google.gson.annotations.SerializedName;
 
-
 public class MutationResult implements Serializable {
 
 	private static final long serialVersionUID = 4353747910455363006L;
@@ -15,6 +14,7 @@ public class MutationResult implements Serializable {
 	private int testsRun;
 	@SerializedName("detected-by")
 	private String detectedBy;
+
 	public MutationStatus getStatus() {
 		return status;
 	}
@@ -56,11 +56,9 @@ public class MutationResult implements Serializable {
 	}
 
 	private Collection<String> tests;
-		
-	public MutationResult() {
-	
-	}
-	
 
+	public MutationResult() {
+
+	}
 
 }

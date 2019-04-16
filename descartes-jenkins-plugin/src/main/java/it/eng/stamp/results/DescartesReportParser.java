@@ -51,8 +51,8 @@ import jenkins.MasterToSlaveFileCallable;
 
 /**
  * Parser that understands Pit Descartes JSON standard reports notation and will
- * generate {@link it.eng.stamp.results.DescartesReport} so that
- * Jenkins will display the results.
+ * generate {@link it.eng.stamp.results.DescartesReport} so that Jenkins will
+ * display the results.
  */
 public class DescartesReportParser implements Serializable {
 
@@ -67,8 +67,7 @@ public class DescartesReportParser implements Serializable {
 		return "Descartes Report parser";
 	}
 
-	protected DescartesReport parse(List<File> reportFile)
-			throws InterruptedException, IOException {
+	protected DescartesReport parse(List<File> reportFile) throws InterruptedException, IOException {
 
 		LOGGER.info("[Descartes Report] Parsing results.");
 
@@ -77,13 +76,13 @@ public class DescartesReportParser implements Serializable {
 		try {
 			File f = reportFile.get(0);
 			String s = FileUtils.readFileToString(f, "UTF-8");
-			
+
 			if (s.isEmpty()) {
 				LOGGER.info("[Descartes Report] ignoring empty file (" + f.getName() + ")");
 				return null;
 			}
 			LOGGER.info("[Descartes Report] parsing " + f.getName());
-			
+
 			JSONParser jsonParser = JSONParser.get();
 			jsonParser.setDeserializer(new ClassificationDeserializer(), MethodClassification.class);
 			return jsonParser.parseMapping(s, DescartesReport.class);
@@ -93,16 +92,15 @@ public class DescartesReportParser implements Serializable {
 		}
 
 	}
-	
-	class ClassificationDeserializer implements JsonDeserializer<MethodClassification>
-	{
+
+	static class ClassificationDeserializer implements JsonDeserializer<MethodClassification> {
 		@Override
 		public MethodClassification deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
 				throws JsonParseException {
 			String value = json.getAsString();
 			return MethodClassification.fromString(value);
 		}
-	  
+
 	}
 
 	static final class ParseResultCallable extends MasterToSlaveFileCallable<DescartesReport> {
@@ -113,16 +111,13 @@ public class DescartesReportParser implements Serializable {
 		private long nowMaster;
 		private String testResultLocations;
 
-
-
-		public ParseResultCallable(DescartesReportParser parserImpl, String testResultLocations,
-				long buildTime, long nowMaster, TaskListener listener) {
+		public ParseResultCallable(DescartesReportParser parserImpl, String testResultLocations, long buildTime,
+				long nowMaster, TaskListener listener) {
 			this.parserImpl = parserImpl;
 			this.testResultLocations = testResultLocations;
 			this.buildTime = buildTime;
 			this.nowMaster = nowMaster;
 
-	
 		}
 
 		public DescartesReport invoke(File dir, VirtualChannel channel) throws IOException, InterruptedException {
@@ -156,16 +151,15 @@ public class DescartesReportParser implements Serializable {
 		}
 	}
 
-	 @SuppressFBWarnings(value={"NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE"}, justification="whatever")
-	public DescartesReport parseResult(final String testResultLocations,final AbstractBuild<?, ?> build,
-			final Launcher launcher, final TaskListener listener)
-			throws InterruptedException, IOException {
+	@SuppressFBWarnings(value = { "NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE" }, justification = "whatever")
+	public DescartesReport parseResult(final String testResultLocations, final AbstractBuild<?, ?> build,
+			final Launcher launcher, final TaskListener listener) throws InterruptedException, IOException {
 
 		long buildTime = build.getTimestamp().getTimeInMillis();
 		long nowMaster = System.currentTimeMillis();
 
-		ParseResultCallable callable = new ParseResultCallable(this, testResultLocations,
-				buildTime, nowMaster, listener);
+		ParseResultCallable callable = new ParseResultCallable(this, testResultLocations, buildTime, nowMaster,
+				listener);
 
 		return build.getWorkspace().act(callable);
 	}

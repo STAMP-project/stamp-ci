@@ -7,7 +7,7 @@ import it.eng.stamp.results.MethodResult;
 public class PackageSummaryDisplay extends AbstractMutationDisplay {
 
 	public PackageSummaryDisplay(AbstractMutationDisplay parent, String name, STAMPReportBuildAction action) {
-		super(parent, name, action);	
+		super(parent, name, action);
 	}
 
 	@Override

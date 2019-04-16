@@ -9,12 +9,13 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * Deserialization of Method Results in method.json report
+ * 
  * @author Valentina Di Giacomo
  *
  */
 @ExportedBean
-public class MethodResult  implements Serializable {
-	
+public class MethodResult implements Serializable {
+
 	private static final long serialVersionUID = 6267907206895444252L;
 	private String name;
 	private String description;
@@ -22,19 +23,19 @@ public class MethodResult  implements Serializable {
 	private String className;
 	@SerializedName("package")
 	private String pakg;
-	
+
 	private MethodClassification classification;
-	
+
 	private Collection<String> detected;
 	@SerializedName("not-detected")
 	private Collection<String> notDetected;
 	private Collection<String> tests;
-	
+
 	private Collection<MutationResult> mutations;
 
 	public MethodResult() {
 	}
-	
+
 	public String getName() {
 		return name;
 	}

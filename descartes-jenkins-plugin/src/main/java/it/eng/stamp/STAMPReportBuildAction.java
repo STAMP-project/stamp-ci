@@ -155,7 +155,7 @@ public class STAMPReportBuildAction implements Action, StaplerProxy {
 		DescartesReport lastReport = previousBuildActionResults.getDescartesReport();
 		getDescartesReport().setLastBuildReport(lastReport);
 	}
-	
+
 	private static final XStream XSTREAM = new XStream2();
 
 	static {

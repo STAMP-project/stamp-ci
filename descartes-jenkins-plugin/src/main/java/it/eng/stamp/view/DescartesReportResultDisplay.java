@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Paint;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.List;
 
@@ -76,7 +77,7 @@ public class DescartesReportResultDisplay extends AbstractMutationDisplay {
 		}
 
 		List<STAMPReportBuildAction> previousActions = previousBuild.getActions(STAMPReportBuildAction.class);
-		if(previousActions.size() == 0) {
+		if (previousActions.size() == 0) {
 			return;
 		}
 
@@ -94,7 +95,7 @@ public class DescartesReportResultDisplay extends AbstractMutationDisplay {
 		getDescartesReport().setLastBuildReport(lastReport);
 	}
 
-	/**
+	/*
 	 * Graph of metric points over time, metric to plot set as request
 	 * parameter.
 	 */
@@ -115,8 +116,8 @@ public class DescartesReportResultDisplay extends AbstractMutationDisplay {
 
 		graph.doPng(request, response);
 	}
-	
-	/**
+
+	/*
 	 * Graph of metric points over time, metric to plot set as request
 	 * parameter.
 	 */
@@ -130,7 +131,7 @@ public class DescartesReportResultDisplay extends AbstractMutationDisplay {
 				DefaultPieDataset dataset = new DefaultPieDataset();
 				dataset.setValue("detected", getDescartesReport().getDetectedCount());
 				dataset.setValue("not-detected", getDescartesReport().getNotDetectedCount());
-				
+
 				return dataset;
 			}
 		};
@@ -140,6 +141,7 @@ public class DescartesReportResultDisplay extends AbstractMutationDisplay {
 
 	private abstract class PieGraph extends Graph {
 		private final String graphTitle;
+
 		private Map<Comparable, Paint> mappings;
 
 		protected PieGraph(final String metricKey, Map<Comparable, Paint> mappings) {
@@ -162,8 +164,10 @@ public class DescartesReportResultDisplay extends AbstractMutationDisplay {
 
 			if (mappings != null) {
 				PiePlot plot = (PiePlot) chart.getPlot();
-				for (Comparable k : mappings.keySet()) {
-					plot.setSectionPaint(k, mappings.get(k));
+				Iterator<Map.Entry<Comparable, Paint>> iterator = mappings.entrySet().iterator();
+				while (iterator.hasNext()) {
+					Map.Entry<Comparable, Paint> entry = iterator.next();
+					plot.setSectionPaint(entry.getKey(), entry.getValue());
 				}
 			}
 			chart.setBackgroundPaint(Color.white);

@@ -17,6 +17,7 @@ public class Analysis implements Serializable {
 
 	/**
 	 * List of all mutators.
+	 * 
 	 * @return the list of mutators
 	 **/
 	public List<String> getMutators() {
@@ -25,6 +26,7 @@ public class Analysis implements Serializable {
 
 	/**
 	 * duration of the run
+	 * 
 	 * @return the duration of the Descartes run
 	 */
 	public int getTime() {

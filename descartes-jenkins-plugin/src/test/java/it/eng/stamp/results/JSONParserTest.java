@@ -13,23 +13,24 @@ import it.eng.stamp.results.DescartesReportParser;
 import it.eng.stamp.util.ReportMetrics;
 
 public class JSONParserTest {
-	
-    @Test
+
+	@Test
 	public void testParsing() throws Exception {
 		DescartesReportParser parser = new DescartesReportParser();
-		
+
 		File f = getResourceAsFile("MutationsResult/mutations.json");
-		
+
 		List<File> files = new ArrayList<>();
 		files.add(f);
-		
+
 		DescartesReport testresult = parser.parse(files);
 		testresult.doIndex();
-		
+
 		Assert.assertFalse("Methods parsed", testresult.getMethods().isEmpty());
-		Assert.assertTrue("Coverage value", testresult.getAverageForMetric(ReportMetrics.COVERAGE)<0.7);
-		Assert.assertTrue("First result classification check", testresult.getMethods().get(0).getClassification().equals(MethodClassification.TESTED));
-		//TODO to improve.
+		Assert.assertTrue("Coverage value", testresult.getAverageForMetric(ReportMetrics.COVERAGE) < 0.7);
+		Assert.assertTrue("First result classification check",
+				testresult.getMethods().get(0).getClassification().equals(MethodClassification.TESTED));
+		// TODO to improve.
 
 	}
 

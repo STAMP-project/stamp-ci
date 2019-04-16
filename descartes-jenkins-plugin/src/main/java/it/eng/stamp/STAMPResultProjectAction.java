@@ -31,7 +31,7 @@ public class STAMPResultProjectAction implements Action {
 	private static final Logger LOGGER = Logger.getLogger(STAMPResultProjectAction.class.getName());
 
 	private AbstractProject<?, ?> project;
-	
+
 	private static final ReportMetrics MAIN_METRIC = ReportMetrics.COVERAGE;
 
 	public STAMPResultProjectAction(AbstractProject<?, ?> project) {
@@ -66,9 +66,10 @@ public class STAMPResultProjectAction implements Action {
 		return getExistingReportsList().size() > 1;
 	}
 
-	public List<String> getMetricsList(){
+	public List<String> getMetricsList() {
 		return ReportMetrics.stringValues();
 	}
+
 	/*
 	 * Graph of metric points over time.
 	 */
@@ -93,33 +94,32 @@ public class STAMPResultProjectAction implements Action {
 		graph.doPng(request, response);
 	}
 
-	/**
-	   * Graph of metric points over time, metric to plot set as request parameter.
-	   */
-	  public void doSummarizerGraphForMetric(final StaplerRequest request,
-	                                          final StaplerResponse response) throws IOException {
-	    final String metricKey = request.getParameter("metricDataKey");
-	    final Map<ChartUtil.NumberOnlyBuildLabel, Double> averagesFromReports =
-	        getAveragesFromAllReports(getExistingReportsList(), metricKey);
+	/*
+	 * Graph of metric points over time, metric to plot set as request
+	 * parameter.
+	 */
+	public void doSummarizerGraphForMetric(final StaplerRequest request, final StaplerResponse response)
+			throws IOException {
+		final String metricKey = request.getParameter("metricDataKey");
+		final Map<ChartUtil.NumberOnlyBuildLabel, Double> averagesFromReports = getAveragesFromAllReports(
+				getExistingReportsList(), metricKey);
 
-	    final Graph graph = new GraphImpl(metricKey + " Overall Graph") {
+		final Graph graph = new GraphImpl(metricKey + " Overall Graph") {
 
-	      protected DataSetBuilder<String, ChartUtil.NumberOnlyBuildLabel> createDataSet() {
-	        DataSetBuilder<String, ChartUtil.NumberOnlyBuildLabel> dataSetBuilder =
-	            new DataSetBuilder<String, ChartUtil.NumberOnlyBuildLabel>();
+			protected DataSetBuilder<String, ChartUtil.NumberOnlyBuildLabel> createDataSet() {
+				DataSetBuilder<String, ChartUtil.NumberOnlyBuildLabel> dataSetBuilder = new DataSetBuilder<String, ChartUtil.NumberOnlyBuildLabel>();
 
-	        for (Map.Entry<ChartUtil.NumberOnlyBuildLabel,Double> entry : averagesFromReports.entrySet()) {
-	          dataSetBuilder.add(entry.getValue(), metricKey, entry.getKey());
-	        }
+				for (Map.Entry<ChartUtil.NumberOnlyBuildLabel, Double> entry : averagesFromReports.entrySet()) {
+					dataSetBuilder.add(entry.getValue(), metricKey, entry.getKey());
+				}
 
-	        return dataSetBuilder;
-	      }
-	    };
+				return dataSetBuilder;
+			}
+		};
 
-	    graph.doPng(request, response);
-	  }
+		graph.doPng(request, response);
+	}
 
-	
 	private abstract class GraphImpl extends Graph {
 		private final String graphTitle;
 
@@ -178,7 +178,8 @@ public class STAMPResultProjectAction implements Action {
 		return adReportList;
 	}
 
-	private Map<ChartUtil.NumberOnlyBuildLabel, Double> getAveragesFromAllReports(final List<DescartesReport> reports, String metricKey) {
+	private Map<ChartUtil.NumberOnlyBuildLabel, Double> getAveragesFromAllReports(final List<DescartesReport> reports,
+			String metricKey) {
 		Map<ChartUtil.NumberOnlyBuildLabel, Double> averages = new TreeMap<ChartUtil.NumberOnlyBuildLabel, Double>();
 		for (DescartesReport report : reports) {
 			double value = -1;
@@ -187,8 +188,8 @@ public class STAMPResultProjectAction implements Action {
 			} catch (IllegalArgumentException e) {
 				// Report might not have custom metric, silently skip in that
 				// case
-				LOGGER.info(
-						String.format("Build %s does not contain %s value, silently skipping", report.getName(), metricKey));
+				LOGGER.info(String.format("Build %s does not contain %s value, silently skipping", report.getName(),
+						metricKey));
 			}
 
 			if (value >= 0) {

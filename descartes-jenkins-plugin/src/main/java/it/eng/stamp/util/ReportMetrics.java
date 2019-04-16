@@ -21,8 +21,6 @@ public enum ReportMetrics {
 	}
 
 	public static List<String> stringValues() {
-		return Stream.of(ReportMetrics.values())
-                .map(ReportMetrics::name)
-                .collect(Collectors.toList());
+		return Stream.of(ReportMetrics.values()).map(ReportMetrics::name).collect(Collectors.toList());
 	}
 }

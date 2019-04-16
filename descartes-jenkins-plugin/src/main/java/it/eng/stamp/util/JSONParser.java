@@ -21,7 +21,6 @@ public class JSONParser {
 		return _instance;
 	}
 
-
 	public <T> T parseMapping(String s, Class<T> classOfT) {
 		LOGGER.info("[JSONParser] Parsing report for class " + classOfT.getName());
 		T result;
@@ -40,12 +39,9 @@ public class JSONParser {
 	public void setDeserializer(Object typeAdapter, Type type) {
 		parser = new GsonBuilder().registerTypeAdapter(type, typeAdapter).create();
 	}
-	
-	public void reset(){
+
+	public void reset() {
 		parser = new GsonBuilder().create();
 	}
-	
-	
-	
 
 }
