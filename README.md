@@ -11,6 +11,7 @@ A Jenkins Freestyle plugin
 ## descartes-jenkins-plugin
 
 ## stamp-jenkins-cookbooks
+[STAMP Jenkins cookbook](stamp-jenkins-cookbooks/README.md) helps you to integrate STAMP technology within your CI/CD infrastructure.
 
 ## jenkins-clover-coverage
 
