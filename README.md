@@ -16,3 +16,8 @@ A Jenkins Freestyle plugin
 ## jenkins-clover-coverage
 
 Jenkins pipeline to generate Clover reports + script to compare results
+
+## stamp-cicd-utils
+
+Utilitary classes for miscellaneous STAMP needs (Gitlab and Git stuff, Botsing tools including maven invoker...)
+
