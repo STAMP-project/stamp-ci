@@ -85,9 +85,6 @@ pipeline {
         }
       }
     }
-   environment {
-    GIT_URL = sh (script: 'git config remote.origin.url', returnStdout: true).trim().replaceAll('https://','')
-  }
 }
 ```
 
