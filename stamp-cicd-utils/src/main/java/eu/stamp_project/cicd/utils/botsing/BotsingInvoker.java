@@ -25,12 +25,12 @@ public class BotsingInvoker {
      * @param crashLog Path to crash log file
      * @param nbFrames Number of exception frames to analyze (ignored if 0 or less)
      * @param testDir Directory where tests are generated (default "crash-reproduction-tests" in POM dir)
-     * @param additional_opts Additional botsing java options (format: -Dname1=value1 ... -DnameN=valueN)
+     * @param additionalOpts Additional botsing java options (format: -Dname1=value1 ... -DnameN=valueN)
      * @param out Output stream for maven invocation logs (null for stdout)
      * @return The maven invocation exit code (0 for success), -1 upon invocation error.
      */
     public static int runBotsing(String pomPath, String botsingVersion,
-    		String crashLog, int nbFrames, String testDir, String additional_opts, PrintStream out) {
+    		String crashLog, int nbFrames, String testDir, String additionalOpts, PrintStream out) {
     	if(out == null) out = System.out;
     	InvocationRequest request = new DefaultInvocationRequest();
     	request.setPomFile(new File(pomPath));
@@ -48,8 +48,8 @@ public class BotsingInvoker {
     	if(testDir != null && testDir.trim().length() > 0) {
     		opts.append(" -Dtest_dir=" + testDir);
     	}
-    	if(additional_opts != null && additional_opts.length() >= 5) { // Minimal length -Dx=y (5 characters)
-    		opts.append(" " + additional_opts);
+    	if(additionalOpts != null && additionalOpts.length() >= 5) { // Minimal length -Dx=y (5 characters)
+    		opts.append(" " + additionalOpts);
     	}
     	request.setMavenOpts(opts.toString());
     	Invoker invoker = new DefaultInvoker();
