@@ -4,8 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -74,16 +74,16 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 	private boolean showReports = true;
 
 	@Nonnull
-	private SelectorEnum selector = DescriptorImpl.defaultSelector;
+	private String selector = DescriptorImpl.defaultSelector;
 
 	@Nonnull
-	private BudgetizerEnum budgetizer = DescriptorImpl.defaultBudgetizer;
+	private String budgetizer = DescriptorImpl.defaultBudgetizer;
 
 	@Nonnull
 	private int numIterations = DescriptorImpl.defaultNumIterations;
 
 	@Nonnull
-	private List<AmplifierEnum> lAmplifiers = DescriptorImpl.defaultLAmplifiers;
+	private String amplifiers = DescriptorImpl.defaultAmplifiers;
 
 	private Properties init_properties;
 
@@ -128,7 +128,7 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 		return showReports;
 	}
 
-	public BudgetizerEnum getBudgetizer() {
+	public String getBudgetizer() {
 		return budgetizer;
 	}
 
@@ -136,12 +136,12 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 		return secondFolder;
 	}
 
-	public SelectorEnum getSelector() {
+	public String getSelector() {
 		return selector;
 	}
 
-	public List<AmplifierEnum> getlAmplifiers() {
-		return lAmplifiers;
+	public String getAmplifiers() {
+		return amplifiers;
 	}
 
 	public int getNumIterations() {
@@ -198,18 +198,18 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 	}
 
 	@DataBoundSetter
-	public void setBudgetizer(@Nonnull BudgetizerEnum budgetizer) {
+	public void setBudgetizer(@Nonnull String budgetizer) {
 		this.budgetizer = budgetizer;
 	}
 
 	@DataBoundSetter
-	public void setSelector(@Nonnull SelectorEnum selector) {
+	public void setSelector(@Nonnull String selector) {
 		this.selector = selector;
 	}
 
 	@DataBoundSetter
-	public void setlAmplifiers(@Nonnull List<AmplifierEnum> lAmplifiers) {
-		this.lAmplifiers = lAmplifiers;
+	public void setAmplifiers(@Nonnull String amplifiers) {
+		this.amplifiers = amplifiers;
 	}
 
 	@DataBoundSetter
@@ -301,10 +301,10 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 		}
 
 		try {
-			List<String> amplString = lAmplifiers.stream().map(a -> a.toString()).collect(Collectors.toList());
-			List<Amplifier> amplifiers = AmplifierEnum.buildAmplifiersFromString(amplString);
-			TestSelector testSelector = selector.buildSelector();
-			DSpot dspot = new DSpot(numIterations, amplifiers, testSelector, budgetizer);
+			String[] amplifiersArray = this.amplifiers.split(":");
+			List<Amplifier> amplifiers = AmplifierEnum.buildAmplifiersFromString(Arrays.asList(amplifiersArray));
+			TestSelector testSelector = SelectorEnum.valueOf(selector).buildSelector();
+			DSpot dspot = new DSpot(numIterations, amplifiers, testSelector, BudgetizerEnum.valueOf(budgetizer));
 			InputConfiguration.get().getFactory().getEnvironment()
 					.setInputClassLoader(DspotStep.class.getClassLoader());
 			if (onlyChanges) {
@@ -336,10 +336,10 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 	public static class DescriptorImpl extends BuildStepDescriptor<Builder> {
 		public static final String defaultMvnHome = ConstantsProperties.MAVEN_HOME.getDefaultValue();
 		public static final String defaultSecondFolder = "";
-		public static final List<AmplifierEnum> defaultLAmplifiers = Collections.emptyList();
-		public static final SelectorEnum defaultSelector = SelectorEnum.PitMutantScoreSelector;
+		public static final String defaultAmplifiers = "None";
+		public static final String defaultSelector = SelectorEnum.PitMutantScoreSelector.toString();
 		public static final int defaultNumIterations = 3;
-		public static final BudgetizerEnum defaultBudgetizer = BudgetizerEnum.NoBudgetizer;
+		public static final String defaultBudgetizer = BudgetizerEnum.NoBudgetizer.toString();
 		public static final String defaultProjectPath = "";
 		public static final String defaultSrcCode = ConstantsProperties.SRC_CODE.getDefaultValue();
 		public static final String defaultTestCode = ConstantsProperties.TEST_SRC_CODE.getDefaultValue();
