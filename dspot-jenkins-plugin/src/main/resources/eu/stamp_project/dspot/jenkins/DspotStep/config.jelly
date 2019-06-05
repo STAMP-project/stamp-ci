@@ -55,13 +55,31 @@
 						${it.toString()}
 					</f:enum>
 				</f:entry>
-				<f:entry title="${%Amplifiers}" field="lAmplifiers"
-					description="Amplifiers">
+				<f:entry title="${%Amplifiers}" field="lAmplifiers" description="Amplifiers">
 					<f:enumSet />
+					<!--
+					<select name="lAmplifiers">
+  						<option value="MethodAdd">MethodAdd</option>
+  						<option value="MethodRemove">MethodRemove</option>
+  						<option value="TestDataMutator">TestDataMutator</option>
+  						<option value="MethodGeneratorAmplifier">MethodGeneratorAmplifier</option>
+  						<option value="ReturnValueAmplifier">ReturnValueAmplifier</option>
+  						<option value="StringLiteralAmplifier">StringLiteralAmplifier</option>
+  						<option value="NumberLiteralAmplifier">NumberLiteralAmplifier</option>
+  						<option value="BooleanLiteralAmplifier">BooleanLiteralAmplifier</option>
+  						<option value="CharLiteralAmplifier">CharLiteralAmplifier</option>
+  						<option value="AllLiteralAmplifiers">AllLiteralAmplifiers</option>
+  						<option value="NullifierAmplifier">NullifierAmplifier</option>
+					</select>
+					-->
 				</f:entry>
 				<f:entry title="${%Second version Location}" field="secondFolder"
 					description="path to second version of the project. To be used with ChangeSelector">
 					<f:textbox default="${descriptor.defaultSecondFolder}" />
+				</f:entry>
+				<f:entry title="${%Maven location}" field="mvnHome"
+					description="path to maven.">
+					<f:textbox default="${descriptor.defaultMvnHome}" />
 				</f:entry>
 			</f:advanced>
 		</f:section>

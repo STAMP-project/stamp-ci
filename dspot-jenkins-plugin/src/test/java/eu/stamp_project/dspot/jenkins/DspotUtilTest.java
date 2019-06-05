@@ -15,7 +15,6 @@ import hudson.model.FreeStyleProject;
 
 public class DspotUtilTest {
 
-	@Rule
 	public JenkinsRule jenkins = new JenkinsRule();
 	JenkinsRule.WebClient wc;
 

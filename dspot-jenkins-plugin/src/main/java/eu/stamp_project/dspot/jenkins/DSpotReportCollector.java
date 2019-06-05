@@ -62,7 +62,7 @@ public class DSpotReportCollector extends Notifier implements SimpleBuildStep {
 
 		PrintStream logger = listener.getLogger();
 		if(run.getAction(DSpotResultsAction.class) == null){
-			logger.print("DSpot report already configured from Buld step. skipping post build step config.");
+			logger.print("DSpot report already configured from Build step. skipping post build step config.");
 			return;
 		}
 		DSpotResults results = new DSpotResults(new FilePath(wsp, outputDir));
