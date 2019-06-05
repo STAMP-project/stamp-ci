@@ -85,9 +85,6 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 	@Nonnull
 	private List<AmplifierEnum> lAmplifiers = DescriptorImpl.defaultLAmplifiers;
 
-	@Nonnull
-	private List<String> amplifiers;
-
 	private Properties init_properties;
 
 	@DataBoundConstructor
@@ -153,10 +150,6 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 
 	public String getMvnHome() {
 		return mvnHome;
-	}
-
-	public List<String> getAmplifiers() {
-		return amplifiers;
 	}
 
 	@DataBoundSetter
@@ -234,11 +227,6 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 		this.mvnHome = mvnHome;
 	}
 
-	@DataBoundSetter
-	public void setAmplifiers(@Nonnull List<String> amplifiers) {
-		this.amplifiers = amplifiers;
-	}
-
 	@Override
 	public BuildStepMonitor getRequiredMonitorService() {
 		return BuildStepMonitor.NONE;
@@ -248,9 +236,6 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 	@Override
 	public void perform(Run<?, ?> run, FilePath wsp, Launcher arg2, TaskListener listener)
 			throws InterruptedException, IOException {
-		listener.getLogger().println("wsp: " + wsp.getRemote());
-		listener.getLogger().println("projectPath: " + projectPath);
-		listener.getLogger().println("wsp + projectPath: " + new FilePath(wsp, projectPath).getRemote());
 		init_properties.setProperty(ConstantsProperties.PROJECT_ROOT_PATH.getName(),
 				new FilePath(wsp, projectPath).getRemote());
 		init_properties.setProperty(ConstantsProperties.SRC_CODE.getName(), new FilePath(wsp, srcCode).getRemote());
