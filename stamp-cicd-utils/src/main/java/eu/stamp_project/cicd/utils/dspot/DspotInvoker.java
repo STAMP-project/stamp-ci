@@ -23,12 +23,13 @@ import eu.stamp_project.cicd.utils.misc.FileUtils;
  */
 public class DspotInvoker {
 
-	protected String pomPath;
+	protected String pomPath = null;
 	protected String testCriterion = null;	// Default PitMutantScoreSelector
 	protected boolean newTestClass = true;	// Test classes to have new names (no overwriting)
 	protected String test;					// Test class(es) DSpot will apply to (default all)
 	protected int iterations = -1;			// Number of DSpot iterations
 	protected Properties configuration;
+	protected boolean persistentConfig = false;
 	protected String dspotVersion;
 
 	/**
@@ -55,6 +56,16 @@ public class DspotInvoker {
 		this.configuration.setProperty("testSrc", "src/test/java");
 	}
     
+	/**
+	 * Makes DSpot config file persistent (no delete on exit)
+	 * @param persist true for persistent config, false otherwise
+	 * @return this invoker
+	 */
+	public DspotInvoker withPersistentConfig(boolean persist) {
+		this.persistentConfig = persist;
+		return this;
+	}
+
     /**
      * Sets target module for DSpot
      * @param targetModule The target module
@@ -132,10 +143,11 @@ public class DspotInvoker {
      * @throws IOException
      */
     public int runDspot(String additionalOpts, PrintStream out) throws IOException {
+    	if(this.pomPath == null) return -1;
     	if(out == null) out = System.out;
     	InvocationRequest request = new DefaultInvocationRequest();
-    	request.setPomFile(new File(pomPath));
-    	request.setBaseDirectory((new File(pomPath)).getParentFile());
+    	request.setPomFile(new File(this.pomPath));
+    	request.setBaseDirectory((new File(this.pomPath)).getParentFile());
     	// "project" property has to be set... otherwise a "null" is inserted by DSpot in the classpath.
     	this.configuration.setProperty("project", request.getBaseDirectory().getAbsolutePath());
     	request.setBatchMode(true);
@@ -193,13 +205,13 @@ public class DspotInvoker {
     private String buildMavenOpts(String additionalOpts) throws IOException {
     	StringWriter confString = new StringWriter(128);
 		this.configuration.store(confString, null);
-    	String confFile = FileUtils.tempFile(confString.toString());
+    	String confFile = FileUtils.tempFile(confString.toString(), this.persistentConfig);
     	StringBuilder opts = new StringBuilder("-Dpath-to-properties=" + confFile);
     	if(this.test != null) opts.append(" -Dtest=" + this.test);
     	if(this.testCriterion != null) opts.append(" -Dtest-criterion=" + this.testCriterion);
     	if(this.newTestClass) opts.append(" -Dgenerate-new-test-class=true");
     	if(this.iterations > 0) opts.append(" -Diteration=" + this.iterations);
-    	opts.append(" -Dproject=" + (new File(pomPath)).getParent());
+    	if(this.pomPath != null) opts.append(" -Dproject=" + (new File(this.pomPath)).getParent());
 
     	if(additionalOpts != null && additionalOpts.length() >= 5) { // Minimal length -Dx=y (5 characters)
     		opts.append(" " + additionalOpts);

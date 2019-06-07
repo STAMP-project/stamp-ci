@@ -16,9 +16,17 @@ public class DspotInvokerTest extends TestCase {
 		Assert.assertEquals(-1, invoker.iterations);
 		Assert.assertTrue(invoker.newTestClass);
 		Assert.assertNull(invoker.testCriterion);
+		Assert.assertFalse(invoker.persistentConfig);
 		
 		invoker = new DspotInvoker("/tmp/pom.xml", "1.0", false);
 		Assert.assertFalse(invoker.newTestClass);
+	}
+	
+	public void testWithPersistentConfig() {
+		DspotInvoker invoker = new DspotInvoker(null, "1.0");
+		Assert.assertFalse(invoker.persistentConfig);
+		invoker.withPersistentConfig(true);
+		Assert.assertTrue(invoker.persistentConfig);
 	}
 
 	public void testWithTargetModule() {
@@ -61,6 +69,12 @@ public class DspotInvokerTest extends TestCase {
 		DspotInvoker invoker = new DspotInvoker("/tmp/pom.xml", "1.0");
 		invoker.withIterations(2);
 		Assert.assertEquals(2, invoker.iterations);
+	}
+	
+	public void testBuildMavenCommand() {
+		DspotInvoker invoker = new DspotInvoker(null, "1.0");
+		String command = invoker.buildMavenCommand(null);
+		Assert.assertTrue(command.startsWith("mvn eu.stamp-project:dspot-maven:1.0:amplify-unit-tests"));
 	}
 
 }
