@@ -35,14 +35,25 @@ public class FileUtils {
 	}
 
 	/**
-	 * Write data to temporary file, and return path
+	 * Write data to temporary file (deleted on exit), and return path
 	 * @param data The data to write
 	 * @return A temporary file absolute path
 	 * @throws IOException
 	 */
 	public static String tempFile(String data) throws IOException {
+		return tempFile(data, false);
+	}
+
+	/**
+	 * Write data to temporary file, and return path
+	 * @param data The data to write
+	 * @param keep false means delete on exit, true means persistent file
+	 * @return A temporary file absolute path
+	 * @throws IOException
+	 */
+	public static String tempFile(String data, boolean keep) throws IOException {
 		File temp = File.createTempFile("stamp", null);
-		temp.deleteOnExit();
+		if(! keep) temp.deleteOnExit();
 		PrintWriter out = null;
 		try {
 			out = new PrintWriter(new FileWriter(temp));

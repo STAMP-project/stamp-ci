@@ -3,14 +3,17 @@ package eu.stamp_project.cicd.utils.git;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.gitlab4j.api.Constants;
 import org.gitlab4j.api.Constants.IssueState;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
+import org.gitlab4j.api.models.Assignee;
 import org.gitlab4j.api.models.Issue;
 import org.gitlab4j.api.models.IssueFilter;
 import org.gitlab4j.api.models.Note;
@@ -160,6 +163,100 @@ public class GitlabIssueManager
 		}
 		return commentIssue(gitlabUrl, gitlabToken, gitlabProject, iid, body);
     }
+    
+    /**
+     * Create a Gitlab issue for a given project
+     * @param gitlabUrl Gitlab server URL
+     * @param privateToken Gitlab private token for authentication
+     * @param projectIdOrPath Gitlab project ID or path
+     * @param title Issue title
+     * @param description Issue content
+     * @return The issue created
+     * @throws IOException
+     */
+    public static Issue createIssue(String gitlabUrl, String privateToken, Object projectIdOrPath, String title, String description) throws IOException {
+    	return createIssue(new GitLabApi(gitlabUrl, privateToken), projectIdOrPath, title, description);
+    }
+
+    /**
+     * Create a Gitlab issue for a given project
+     * @param gitlabConfig Gitlab config with gitlab.url, gitlab.token and gitlab.project expected
+     * @param title Issue title
+     * @param description Issue content
+     * @return The issue created
+     * @throws IOException
+     */
+    public static Issue createIssue(Properties gitlabConfig, String title, String description) throws IOException {
+    	String gitlabUrl = gitlabConfig.getProperty("gitlab.url");
+		String gitlabToken = gitlabConfig.getProperty("gitlab.token");
+		String gitlabProject = gitlabConfig.getProperty("gitlab.project");
+		if(gitlabUrl == null || gitlabToken == null || gitlabProject == null) {
+			throw new IOException("Missing Gitlab URL and/or private token and/or project ID or path in gitlab.properties");
+		}
+		return createIssue(gitlabUrl, gitlabToken, gitlabProject, title, description);
+    }
+    
+    /**
+     * Update a Gitlab issue for a given project
+     * @param gitlabUrl Gitlab server URL
+     * @param privateToken Gitlab private token for authentication
+     * @param projectIdOrPath Gitlab project ID or path
+     * @param iid ID of issue to update
+     * @param title Issue title
+     * @param description Issue content
+     * @return The issue updated
+     * @throws IOException
+     */
+    public static Issue updateIssue(String gitlabUrl, String privateToken, Object projectIdOrPath, int iid, String title, String description) throws IOException {
+    	return updateIssue(new GitLabApi(gitlabUrl, privateToken), projectIdOrPath, iid, title, description);
+    }
+    
+    /**
+     * Update a Gitlab issue for a given project
+     * @param gitlabConfig Gitlab config with gitlab.url, gitlab.token and gitlab.project expected
+     * @param iid ID of issue to update
+     * @param title Issue title
+     * @param description Issue content
+     * @return The issue updated
+     * @throws IOException
+     */
+    public static Issue updateIssue(Properties gitlabConfig, int iid, String title, String description) throws IOException {
+    	String gitlabUrl = gitlabConfig.getProperty("gitlab.url");
+		String gitlabToken = gitlabConfig.getProperty("gitlab.token");
+		String gitlabProject = gitlabConfig.getProperty("gitlab.project");
+		if(gitlabUrl == null || gitlabToken == null || gitlabProject == null) {
+			throw new IOException("Missing Gitlab URL and/or private token and/or project ID or path in gitlab.properties");
+		}
+		return updateIssue(gitlabUrl, gitlabToken, gitlabProject, iid, title, description);
+    }
+    
+    /**
+     * Delete an issue for a given project
+     * @param gitlabUrl Gitlab server URL
+     * @param privateToken Gitlab private token for authentication
+     * @param projectIdOrPath Gitlab project ID or path
+     * @param iid Issue ID
+     * @throws IOException
+     */
+    public static void deleteIssue(String gitlabUrl, String privateToken, Object projectIdOrPath, int iid) throws IOException {
+    	deleteIssue(new GitLabApi(gitlabUrl, privateToken), projectIdOrPath, iid);
+    }
+    
+    /**
+     * Delete an issue for a given project
+     * @param gitlabConfig Gitlab config with gitlab.url, gitlab.token and gitlab.project expected
+     * @param iid Issue ID
+     * @throws IOException
+     */
+    public static void deleteIssue(Properties gitlabConfig, int iid) throws IOException {
+    	String gitlabUrl = gitlabConfig.getProperty("gitlab.url");
+		String gitlabToken = gitlabConfig.getProperty("gitlab.token");
+		String gitlabProject = gitlabConfig.getProperty("gitlab.project");
+		if(gitlabUrl == null || gitlabToken == null || gitlabProject == null) {
+			throw new IOException("Missing Gitlab URL and/or private token and/or project ID or path in gitlab.properties");
+		}
+		deleteIssue(gitlabUrl, gitlabToken, gitlabProject, iid);
+    }
 
     /**
      * Decide whether an issue is likely to contain an exception stack (or not)
@@ -191,6 +288,75 @@ public class GitlabIssueManager
     private static Issue getIssue(GitLabApi api, Object projectIdOrPath, int iid) throws IOException {
     	try {
     		return api.getIssuesApi().getIssue(projectIdOrPath, iid);
+    	} catch(GitLabApiException e) {
+    		throw new IOException(e);
+    	}
+    }
+    
+    /**
+     * Create a Gitlab issue for a given project
+     * @param api Gitlab4j session
+     * @param projectIdOrPath Gitlab project ID or path
+     * @param title Issue title
+     * @param description Issue content
+     * @return The created issue
+     * @throws IOException
+     */
+    private static Issue createIssue(GitLabApi api, Object projectIdOrPath, String title, String description) throws IOException {
+    	try {
+    		return api.getIssuesApi().createIssue(projectIdOrPath, title, description);
+    	} catch(GitLabApiException e) {
+    		throw new IOException(e);
+    	}
+    }
+    
+    /**
+     * 
+     * @param api Gitlab4j session
+     * @param projectIdOrPath
+     * @param iid Issue ID Gitlab project ID or path
+     * @param title Issue title
+     * @param description Issue content
+     * @return The updated issue
+     * @throws IOException
+     */
+    private static Issue updateIssue(GitLabApi api, Object projectIdOrPath, int iid, String title, String description) throws IOException {
+    	try {
+    		Issue issue = getIssue(api, projectIdOrPath, iid);
+    		
+    		if(issue != null) {
+    			List<Integer> ids = new LinkedList<Integer>();
+    			List<Assignee> assignees = issue.getAssignees();
+    			if(assignees != null) {
+    				for(Assignee assignee : assignees) {
+    				  ids.add(assignee.getId());
+    				}
+    			}
+    			if(ids.isEmpty()) ids = null;
+    			
+    			return api.getIssuesApi().updateIssue(projectIdOrPath, iid, title, description,
+    					issue.getConfidential(), ids,
+    					(issue.getMilestone() == null ? null : issue.getMilestone().getId()),
+    					null, // Label
+    					Constants.StateEvent.REOPEN, issue.getUpdatedAt(), issue.getDueDate());
+    		} else {
+    			return null;
+    		}
+    	} catch(GitLabApiException e) {
+    		throw new IOException(e);
+    	}
+    }
+    
+    /**
+     * Delete an issue for a given project
+     * @param api Gitlab4j session
+     * @param projectIdOrPath Gitlab project ID or path
+     * @param iid Issue ID
+     * @throws IOException
+     */
+    private static void deleteIssue(GitLabApi api, Object projectIdOrPath, int iid) throws IOException {
+    	try {
+    		api.getIssuesApi().deleteIssue(projectIdOrPath, iid);
     	} catch(GitLabApiException e) {
     		throw new IOException(e);
     	}
