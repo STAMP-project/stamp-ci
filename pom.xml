@@ -56,7 +56,7 @@
           <configuration>
             <outputFormats>
               <format>GITLAB-ISSUES</format>
-              <format>HTML</format>
+              <format>XML</format>
             </outputFormats>
             <pluginConfiguration>
               <test>1</test>
