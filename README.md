@@ -1,17 +1,17 @@
 # descartes-issue-generator
 
 This project extends the pitmp-maven-plugin, to generate Gitlab issues out of mutation testing:
-to provide that, it adds a new output format, GITLAB-ISSUE, to PIT/Descartes.
+to provide that, it adds a new output format, GITLAB-ISSUES, to PIT/Descartes.
 
 The generated Gitlab issues will be overwritten (updated) if the plugin is run more than once,
 so you can use it multiple times without generating tons of verbose issues...
 
 To use it, just add some configuration to pitmp-maven-plugin, to declare:
-- GITLAB-ISSUE as an output format (requires fullMutationMatrix=true so that list of succeding tests is provided by PIT)
+- GITLAB-ISSUES as an output format (requires fullMutationMatrix=true so that list of succeding tests is provided by PIT)
 - Gitlab configuration (optional): if you want Gitlab issues to be injected in your repository, specify the destination
 (Gitlab url, project and token).
 
-Note that, as fullMutationMatrix=true is required, PIT will only allow XML output in addition to GITLAB-ISSUE
+Note that, as fullMutationMatrix=true is required, PIT will only allow XML output in addition to GITLAB-ISSUES
 (eg. no HTML nor JSON is allowed). This limitation is due to PIT/Descartes.
 
 Example of Descartes plugin configuration to enable GITLAB-ISSUE output:
