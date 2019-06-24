@@ -6,6 +6,8 @@ to provide that, it adds a new output format, GITLAB-ISSUES, to PIT/Descartes.
 The generated Gitlab issues will be overwritten (updated) if the plugin is run more than once,
 so you can use it multiple times without generating tons of verbose issues...
 
+## Configuration
+
 To use it, just add some configuration to pitmp-maven-plugin, to declare:
 - GITLAB-ISSUES as an output format (requires fullMutationMatrix=true so that list of succeding tests is provided by PIT)
 - Gitlab configuration (optional): if you want Gitlab issues to be injected in your repository, specify the destination
@@ -52,4 +54,14 @@ Example of Descartes plugin configuration to enable GITLAB-ISSUE output:
     </configuration>
   </plugin>
 ```
+
+## Execution
+
+To run Descartes with the configuration above:
+
+```
+mvn eu.stamp-project:pitmp-maven-plugin:descartes
+```
+(Note: generally requires that your project is built before: run "mvn clean install" prior to running Descartes !)
+
 
