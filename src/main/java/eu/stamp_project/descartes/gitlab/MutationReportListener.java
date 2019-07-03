@@ -6,10 +6,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
 import org.gitlab4j.api.models.Issue;
+import org.pitest.coverage.TestInfo;
 import org.pitest.mutationtest.ClassMutationResults;
 import org.pitest.mutationtest.DetectionStatus;
 import org.pitest.mutationtest.ListenerArguments;
@@ -65,7 +67,21 @@ public class MutationReportListener implements MutationResultListener {
 	public void handleMutationResult(ClassMutationResults results) {
 		LinkedHashSet<String> succeedingTestClasses =new LinkedHashSet<String>();
 		for (MutationResult mutation : results.getMutations()) {
-			List<String> succeedingTests = mutation.getSucceedingTests();
+			List<String> succeedingTests = null;
+
+			// Retrieve succeeding tests list
+			// In "full matrix" mode, returned by getSucceedingTests()
+			// Otherwise, assume the list of tests run all pass when mutation survived...
+			if(this.listenerArguments.isFullMutationMatrix()) {
+				succeedingTests = mutation.getSucceedingTests();
+			} else if (mutation.getStatus() == DetectionStatus.SURVIVED) {
+				List<TestInfo> succeedingTestsInfo = mutation.getDetails().getTestsInOrder();
+				for(TestInfo testInfo : succeedingTestsInfo) {
+					if(succeedingTests == null) succeedingTests = new LinkedList<String>();
+					succeedingTests.add(testInfo.getName());
+				}
+			}
+
 			if(succeedingTests != null && succeedingTests.size() > 0) {
 				out.log(mutation.getStatus(), "==========================================================================");
 				if(mutation.getStatus() == DetectionStatus.SURVIVED) {
