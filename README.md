@@ -37,7 +37,7 @@ Example of Descartes plugin configuration to enable GITLAB-ISSUE output:
       </dependency>
     </dependencies>
     <!--
-      fullMutationMatrix=true optional (required to detect minor issues).
+      fullMutationMatrix=true optional (required to detect minor issues, but slower processing).
       If set, PIT/Descartes would only allows XML output (no HTML, JSON...)
       Output will be written in reportsDirectory (with same default as for Descartes),
       and optionally to Gitlab if appropriate configuration of destination is provided.
