@@ -13,12 +13,13 @@ When critical issues are detected (GREEN test suite upon code mutation), DSpot c
 ## Configuration
 
 To use it, just add some configuration to pitmp-maven-plugin, to declare:
-- GITLAB-ISSUES as an output format (requires fullMutationMatrix=true so that list of succeding tests is provided by PIT)
+- GITLAB-ISSUES as an output format
 - Gitlab configuration (optional): if you want Gitlab issues to be injected in your repository, specify the destination
 (Gitlab url, project and token).
 
-Note that, as fullMutationMatrix=true is required, PIT will only allow XML output in addition to GITLAB-ISSUES
-(eg. no HTML nor JSON is allowed). This limitation is due to PIT/Descartes.
+Results are more complete if fullMutationMatrix=true set, but processing would be slower, and PIT would only allow XML output in addition to GITLAB-ISSUES
+(eg. no HTML nor JSON allowed). These limitations are due to PIT/Descartes.
+Without fullMutationMatrix set, only critical issues will be detected (mutations that are not detected at all), and processing will be faster.
 
 Example of Descartes plugin configuration to enable GITLAB-ISSUE output:
 
@@ -36,8 +37,8 @@ Example of Descartes plugin configuration to enable GITLAB-ISSUE output:
       </dependency>
     </dependencies>
     <!--
-      fullMutationMatrix=true required (so that list of succeding tests is provided by PIT) 
-      With that option, PIT/Descartes only allows XML output (no HTML, JSON...)
+      fullMutationMatrix=true optional (required to detect minor issues).
+      If set, PIT/Descartes would only allows XML output (no HTML, JSON...)
       Output will be written in reportsDirectory (with same default as for Descartes),
       and optionally to Gitlab if appropriate configuration of destination is provided.
     -->
@@ -70,7 +71,7 @@ mvn eu.stamp-project:pitmp-maven-plugin:descartes
 
 According to issues discovered by Descartes, 3 files may be generated as output:
 - git_critical_issue.txt reports code mutations that are not detected by tests at all (GREEN test suite).
-- git_minor_issue.txt reports code mutations that SOME tests do not detect.
+- git_minor_issue.txt reports code mutations that SOME tests do not detect (only if fullMutationMatrix is set to true).
 - git_no_coverage.txt reports missing unit tests.
 
 The 2 first ones are replicated as Gitlab issues (if a proper Gitlab configuration is provided).
