@@ -65,7 +65,9 @@ public class MutationReportListener implements MutationResultListener {
 	}
 
 	public void handleMutationResult(ClassMutationResults results) {
-		LinkedHashSet<String> succeedingTestClasses =new LinkedHashSet<String>();
+		LinkedHashSet<String> succeedingTestClasses = new LinkedHashSet<String>();
+
+		boolean withCriticalIssues = false;
 		for (MutationResult mutation : results.getMutations()) {
 			List<String> succeedingTests = null;
 
@@ -85,6 +87,7 @@ public class MutationReportListener implements MutationResultListener {
 			if(succeedingTests != null && succeedingTests.size() > 0) {
 				out.log(mutation.getStatus(), "==========================================================================");
 				if(mutation.getStatus() == DetectionStatus.SURVIVED) {
+					withCriticalIssues = true;
 					out.logSurvived("CRITICAL TEST FAILURE: test suite GREEN upon code mutation");
 				} else {
 					out.logKilled("Minor test failure: some test(s) do not detect code mutation");
@@ -133,7 +136,7 @@ public class MutationReportListener implements MutationResultListener {
 		}
 		
 		//TODO focus DSpot on this case ?
-		if(! succeedingTestClasses.isEmpty()) {
+		if(withCriticalIssues && ! succeedingTestClasses.isEmpty()) {
 			DspotInvoker dspot = new DspotInvoker(null, "2.1.1-SNAPSHOT")
 				.withPersistentConfig(true)
 				.withOutputDir("src/test/java")
