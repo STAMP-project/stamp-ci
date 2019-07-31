@@ -7,7 +7,7 @@ Both freestyle jobs and pipelines are supported.
 Developed in the context of [STAMP project](https://stamp.ow2.org/)
 
 ## Latest release
-v.1.0.1-SNAPSHOT (DSpot 1.2.2-SNAPSHOT)
+v.1.0.2-SNAPSHOT (DSpot 2.0.0 eu.stamp-project:dspot:2.0.0)
 
 ## Install
 * Install the plugin in Jenkins (for details on how to install a plugin see [here](https://jenkins.io/doc/book/managing/plugins/)).
@@ -60,7 +60,7 @@ Note that the step must be in the same node where DSpot run.
 ### Advanced Options
 | Option  | pipeline variable | Usage   | Default   |
 | -------- | ------  | --------------------------------------------------- | ------- |
-| `Amplifiers`   |  `lAmplifiers`  | List of amplifiers to use | NONE |
+| `Amplifiers`   |  `amplifiers`  | List of amplifiers (: as speparator) | NONE |
 | `Selector`    | `selector` | specify the test adequacy criterion to be maximized	| `PitMutantScoreSelector` |
 | `Budgetizer`  | `budgetizer` | 	specify a Bugdetizer | `NoBudgetizer`  |
 | `Number of Iterations`  | `numIterations` |  the number of amplification iterations | 3  |

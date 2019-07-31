@@ -46,32 +46,21 @@
 					<f:number min="0" step="1" default="${descriptor.defaultNumIterations}" />
 				</f:entry>
 				<f:entry title="${%Test selector}" field="selector">
-					<f:enum field="selector">
-						${it.toString()}
-					</f:enum>
+				    <select name="selector" >
+    					<option value="PitMutantScoreSelector" selected="${instance.selector.equals('PitMutantScoreSelector')? 'true':null}">PitMutantScoreSelector</option>
+    					<option value="JacocoCoverageSelector" selected="${instance.selector.equals('JacocoCoverageSelector')? 'true':null}">JacocoCoverageSelector</option>
+    					<option value="TakeAllSelector" selected="${instance.selector.equals('TakeAllSelector')? 'true':null}">TakeAllSelector</option> 
+    					<option value="ChangeDetectorSelector" selected="${instance.selector.equals('ChangeDetectorSelector')? 'true':null}">ChangeDetectorSelector</option>                
+					</select>
 				</f:entry>
 				<f:entry field="budgetizer" title="${%Budgetizer}">
-					<f:enum field="budgetizer">
-						${it.toString()}
-					</f:enum>
+				<select name="budgetizer" >
+    				<option value="NoBudgetizer" selected="${instance.budgetizer.equals('NoBudgetizer')? 'true':null}">NoBudgetizer</option>
+    				<option value="SimpleBudgetizer" selected="${instance.budgetizer.equals('SimpleBudgetizer')? 'true':null}">SimpleBudgetizer</option>               
+				</select>
 				</f:entry>
-				<f:entry title="${%Amplifiers}" field="lAmplifiers" description="Amplifiers">
-					<f:enumSet />
-					<!--
-					<select name="lAmplifiers">
-  						<option value="MethodAdd">MethodAdd</option>
-  						<option value="MethodRemove">MethodRemove</option>
-  						<option value="TestDataMutator">TestDataMutator</option>
-  						<option value="MethodGeneratorAmplifier">MethodGeneratorAmplifier</option>
-  						<option value="ReturnValueAmplifier">ReturnValueAmplifier</option>
-  						<option value="StringLiteralAmplifier">StringLiteralAmplifier</option>
-  						<option value="NumberLiteralAmplifier">NumberLiteralAmplifier</option>
-  						<option value="BooleanLiteralAmplifier">BooleanLiteralAmplifier</option>
-  						<option value="CharLiteralAmplifier">CharLiteralAmplifier</option>
-  						<option value="AllLiteralAmplifiers">AllLiteralAmplifiers</option>
-  						<option value="NullifierAmplifier">NullifierAmplifier</option>
-					</select>
-					-->
+				<f:entry title="${%Amplifiers}" field="amplifiers" description="Amplifiers">
+        			<f:expandableTextbox default="${descriptor.defaultAmplifiers}" />
 				</f:entry>
 				<f:entry title="${%Second version Location}" field="secondFolder"
 					description="path to second version of the project. To be used with ChangeSelector">
