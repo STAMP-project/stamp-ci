@@ -61,7 +61,7 @@ public class DSpotReportCollector extends Notifier implements SimpleBuildStep {
 			throws InterruptedException, IOException {
 
 		PrintStream logger = listener.getLogger();
-		if(run.getAction(DSpotResultsAction.class) == null){
+		if(run.getAction(DSpotResultsAction.class) != null){
 			logger.print("DSpot report already configured from Build step. skipping post build step config.");
 			return;
 		}
