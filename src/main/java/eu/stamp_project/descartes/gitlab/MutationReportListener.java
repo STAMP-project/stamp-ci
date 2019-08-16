@@ -39,7 +39,7 @@ public class MutationReportListener implements MutationResultListener {
 	public static boolean underTest = false;
 
 	public MutationReportListener(Properties props, ListenerArguments args) {
-		this.configuration = props;
+		this.configuration = (props != null ? props : new Properties());
 		this.listenerArguments = args;
 		this.coverage = args.getCoverage().createSummary().getCoverage();
 	}
