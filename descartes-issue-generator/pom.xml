@@ -1,0 +1,94 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>eu.stamp-project</groupId>
+  <artifactId>descartes-issue-generator</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <pitest.version>1.4.7</pitest.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>eu.stamp-project</groupId>
+      <artifactId>stamp-cicd-utils</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.pitest</groupId>
+      <artifactId>pitest-entry</artifactId>
+      <version>${pitest.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.11</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+
+        <!--
+            STAMP: mvn org.pitest:pitest-maven:mutationCoverage -DmutationEngine=descartes
+        -->
+        <plugin>
+          <groupId>org.pitest</groupId>
+          <artifactId>pitest-maven</artifactId>
+          <version>${pitest.version}</version>
+          <dependencies>
+            <dependency>
+              <groupId>eu.stamp-project</groupId>
+              <artifactId>descartes-issue-generator</artifactId>
+              <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+              <groupId>eu.stamp-project</groupId>
+              <artifactId>descartes</artifactId>
+              <version>1.2.6-SNAPSHOT</version>
+            </dependency>
+          </dependencies>
+          <configuration>
+            <outputFormats>
+              <format>GITLAB-ISSUES</format>
+              <format>XML</format>
+            </outputFormats>
+            <pluginConfiguration>
+              <test>1</test>
+            </pluginConfiguration>
+          </configuration>
+        </plugin>
+
+        <!--
+            STAMP: mvn dspot:amplify-unit-tests
+        -->
+        <plugin>
+          <groupId>eu.stamp-project</groupId>
+          <artifactId>dspot-maven</artifactId>
+          <version>2.0.1-SNAPSHOT</version>
+          <configuration>
+            <targetModule>pdp-engine</targetModule>
+            <src>src/main/java</src>
+            <testSrc>src/test/java</testSrc>
+            <!--testCriterion>PitMutantScoreSelector</testCriterion-->
+            <testCriterion>JacocoCoverageSelector</testCriterion>
+            <!--amplifiers>
+              <amplifier>AllLiteralAmplifiers</amplifier>
+            </amplifiers-->
+            <outputDirectory>target/trash</outputDirectory>
+            <verbose>true</verbose>
+            <generate-new-test-class>true</generate-new-test-class>
+            <with-comment>true</with-comment>
+            <!--use-maven-to-exe-test>true</use-maven-to-exe-test-->
+          </configuration>
+        </plugin>
+
+      </plugins>
+    </pluginManagement>
+  </build>
+</project>
