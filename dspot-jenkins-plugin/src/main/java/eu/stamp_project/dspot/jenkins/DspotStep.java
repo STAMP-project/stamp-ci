@@ -243,7 +243,7 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 				new FilePath(wsp, testCode).getRemote());
 		init_properties.setProperty(ConstantsProperties.OUTPUT_DIRECTORY.getName(),
 				new FilePath(wsp, outputDir).getRemote());
-		init_properties.setProperty(ConstantsProperties.FILTER.getName(), testFilter);
+		init_properties.setProperty(ConstantsProperties.PIT_FILTER_CLASSES_TO_KEEP.getName(), testFilter);
 		init_properties.setProperty(ConstantsProperties.TEST_CLASSES.getName(),
 				new FilePath(wsp, testClasses).getRemote());
 		init_properties.setProperty(ConstantsProperties.SRC_CLASSES.getName(),
@@ -339,13 +339,13 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 		public static final String defaultAmplifiers = "None";
 		public static final String defaultSelector = SelectorEnum.PitMutantScoreSelector.toString();
 		public static final int defaultNumIterations = 3;
-		public static final String defaultBudgetizer = BudgetizerEnum.NoBudgetizer.toString();
+		public static final String defaultBudgetizer = BudgetizerEnum.RandomBudgetizer.toString();
 		public static final String defaultProjectPath = "";
 		public static final String defaultSrcCode = ConstantsProperties.SRC_CODE.getDefaultValue();
 		public static final String defaultTestCode = ConstantsProperties.TEST_SRC_CODE.getDefaultValue();
 		public static final String defaultSrcClasses = ConstantsProperties.SRC_CLASSES.getDefaultValue();
 		public static final String defaultTestClasses = ConstantsProperties.TEST_CLASSES.getDefaultValue();
-		public static final String defaultTestFilter = ConstantsProperties.FILTER.getDefaultValue();
+		public static final String defaultTestFilter = ConstantsProperties.PIT_FILTER_CLASSES_TO_KEEP.getDefaultValue();
 		public static final String defaultOutputDir = "dspot-out";
 		public static final boolean defaultOnlyChanges = false;
 		public static final boolean defaultShowReports = true;
