@@ -55,15 +55,16 @@
 				</f:entry>
 				<f:entry field="budgetizer" title="${%Budgetizer}">
 				<select name="budgetizer" >
-    				<option value="NoBudgetizer" selected="${instance.budgetizer.equals('NoBudgetizer')? 'true':null}">NoBudgetizer</option>
-    				<option value="SimpleBudgetizer" selected="${instance.budgetizer.equals('SimpleBudgetizer')? 'true':null}">SimpleBudgetizer</option>               
+    				<option value="RandomBudgetizer" selected="${instance.budgetizer.equals('RandomBudgetizer')? 'true':null}">RandomBudgetizer</option>
+    				<option value="SimpleBudgetizer" selected="${instance.budgetizer.equals('SimpleBudgetizer')? 'true':null}">SimpleBudgetizer</option>
+    				<option value="TextualDistanceBudgetizer" selected="${instance.budgetizer.equals('TextualDistanceBudgetizer')? 'true':null}">TextualDistanceBudgetizer</option>               
 				</select>
 				</f:entry>
 				<f:entry title="${%Amplifiers}" field="amplifiers" description="Amplifiers">
         			<f:expandableTextbox default="${descriptor.defaultAmplifiers}" />
 				</f:entry>
 				<f:entry title="${%Second version Location}" field="secondFolder"
-					description="path to second version of the project. To be used with ChangeSelector">
+					description="path to second version of the project. To be used with ChangeDetectorSelector">
 					<f:textbox default="${descriptor.defaultSecondFolder}" />
 				</f:entry>
 				<f:entry title="${%Maven location}" field="mvnHome"
