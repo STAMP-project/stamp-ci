@@ -20,10 +20,12 @@ import org.kohsuke.stapler.DataBoundSetter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.stamp_project.Main;
 import eu.stamp_project.dspot.DSpot;
 import eu.stamp_project.dspot.amplifier.Amplifier;
 import eu.stamp_project.dspot.jenkins.report.DSpotResults;
 import eu.stamp_project.dspot.selector.TestSelector;
+import eu.stamp_project.utils.collector.CollectorConfig;
 import eu.stamp_project.utils.options.AmplifierEnum;
 import eu.stamp_project.utils.options.BudgetizerEnum;
 import eu.stamp_project.utils.options.SelectorEnum;
@@ -45,6 +47,7 @@ import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Builder;
 import jenkins.tasks.SimpleBuildStep;
+import spoon.reflect.declaration.CtType;
 
 public class DspotStep extends Builder implements SimpleBuildStep {
 
@@ -232,7 +235,7 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 		return BuildStepMonitor.NONE;
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked", "rawtypes", "static-access" })
 	@Override
 	public void perform(Run<?, ?> run, FilePath wsp, Launcher arg2, TaskListener listener)
 			throws InterruptedException, IOException {
@@ -301,16 +304,46 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 		}
 
 		try {
+
+			// amplifiers settings
 			String[] amplifiersArray = this.amplifiers.split(":");
+
+			// cleaning amplifyArray
+			int size = amplifiersArray.length;
+			for (int i = 0; i < size; i++) {
+				amplifiersArray[i] = amplifiersArray[i].trim();
+				if (amplifiersArray[i].isEmpty()) {
+					amplifiersArray[i] = DescriptorImpl.defaultAmplifiers;
+				}
+			}
 			List<Amplifier> amplifiers = AmplifierEnum.buildAmplifiersFromString(Arrays.asList(amplifiersArray));
+
+			// selector settings
 			TestSelector testSelector = SelectorEnum.valueOf(selector).buildSelector();
+
 			DSpot dspot = new DSpot(numIterations, amplifiers, testSelector, BudgetizerEnum.valueOf(budgetizer));
 			InputConfiguration.get().getFactory().getEnvironment()
 					.setInputClassLoader(DspotStep.class.getClassLoader());
+
+			final List<CtType<?>> amplifiedTestClasses;
+			final long startTime = System.currentTimeMillis();
+
 			if (onlyChanges) {
-				dspot.amplifyTestClasses(testList.stream().map(this::pathToQualifiedName).collect(Collectors.toList()));
+				amplifiedTestClasses = dspot.amplifyTestClasses(
+						testList.stream().map(this::pathToQualifiedName).collect(Collectors.toList()));
 			} else
-				dspot.amplifyAllTests();
+				amplifiedTestClasses = dspot.amplifyAllTests();
+
+			LOGGER.info("Amplification {}.", amplifiedTestClasses.isEmpty() ? "failed" : "succeed");
+			final long elapsedTime = System.currentTimeMillis() - startTime;
+			LOGGER.info("Elapsed time {} ms", elapsedTime);
+
+			// global report handling
+			Main.GLOBAL_REPORT.output();
+			Main.GLOBAL_REPORT.reset();
+			// Send info collected.
+			CollectorConfig.getInstance().getInformationCollector().sendInfo();
+
 		} catch (Exception e) {
 			listener.getLogger()
 					.println("There was an error running DSpot on your project. Check the logs for details.");
