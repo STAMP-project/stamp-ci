@@ -1,42 +1,43 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
 	<f:block>
+		<h4>Mondatory fields</h4>
 		<f:entry title="${%Project Location}" field="projectPath"
-			description="path to the target project root from the folder where dspot is executed. Defaults to Workspace">
+			description="Relative path to the target project root from the folder where dspot is executed. Defaults to Workspace">
 			<f:textbox default="${descriptor.defaultProjectPath}" />
 		</f:entry>
 		<f:entry title="${%Source location}" field="srcCode"
-			description="path to the source code folder.">
+			description="Relative path to the source code folder.">
 			<f:textbox default="${descriptor.defaultSrcCode}" />
 		</f:entry>
 		<f:entry title="${%Tests location}" field="testCode"
-			description="path to the test source folder.">
+			description="Relative path to the test source folder.">
 			<f:textbox default="${descriptor.defaultTestCode}" />
 		</f:entry>
+		<f:entry title="${%PIT version}" field="pitVersion"
+			description="Specify the version of PIT to use.">
+			<f:textbox default="${descriptor.defaultPitVersion}" />
+		</f:entry>
+		<f:entry title="${%PIT filter classes to keep}" field="testPitFilterClassesToKeep"
+			description="Specify the filter on the package name containing tests to be amplified.">
+			<f:textbox default="${descriptor.defaultPitFilterClassesToKeep}" />
+		</f:entry>			
+		<f:entry title="${%Output directory}" field="outputDir"
+			description="Specify a path folder for the output.">
+			<f:textbox default="${descriptor.defaultOutputDir}" />
+		</f:entry>
+	</f:block>
+	<f:block>
+		<h4>Optional fields</h4>
 		<f:entry title="${%Source binary location}" field="srcClasses"
-			description="path to the compiled code folder. (.class files)">
+			description="Specify the relative path from project/targetModule of the folder that contain binaries of the source program (.class). Default: target/classes/.">
 			<f:textbox default="${descriptor.defaultSrcClasses}" />
 		</f:entry>
 		<f:entry title="${%Tests binary location}" field="testClasses"
-			description="path to the compiled tests folder. (.class files)">
+			description="Specify the relative path from project/targetModule of the folder that contain binaries of the test source program (.class). Default: target/test-classes/.">
 			<f:textbox default="${descriptor.defaultTestClasses}" />
 		</f:entry>
-		<f:entry title="${%Filter}" field="testFilter"
-			description="filter on the package name containing tests to be amplified ">
-			<f:textbox default="${descriptor.defaultTestFilter}" />
-		</f:entry>
-		<f:entry title="${%Output directory}" field="outputDir"
-			description=" path to the output folder.">
-			<f:textbox default="${descriptor.defaultOutputDir}" />
-		</f:entry>
-		<f:entry title="${%Run on changes}" field="onlyChanges"
-			description="Runs only on newly committed tests">
-			<f:checkbox default="${descriptor.defaultOnlyChanges}" />
-		</f:entry>
-			<f:entry title="${%Show Reports}" field="showReports"
-			description="Enable the visualization of DSpot results in the Jenkins UI">
-			<f:checkbox default="${descriptor.defaultShowReports}" />
-		</f:entry>
+	
 	</f:block>
 	<f:block>
 		<f:section title="Advanced DSpot Options">
@@ -60,15 +61,16 @@
     				<option value="TextualDistanceBudgetizer" selected="${instance.budgetizer.equals('TextualDistanceBudgetizer')? 'true':null}">TextualDistanceBudgetizer</option>               
 				</select>
 				</f:entry>
-				<f:entry title="${%Amplifiers}" field="amplifiers" description="Amplifiers">
+				<f:entry title="${%Amplifiers}" field="amplifiers" 
+					description="Specify one o more kind of Amplifier, separated by ':'. Default: None">
         			<f:expandableTextbox default="${descriptor.defaultAmplifiers}" />
 				</f:entry>
 				<f:entry title="${%Second version Location}" field="secondFolder"
-					description="path to second version of the project. To be used with ChangeDetectorSelector">
+					description="Specify the path of the second version of the project. To be used with ChangeDetectorSelector">
 					<f:textbox default="${descriptor.defaultSecondFolder}" />
 				</f:entry>
-				<f:entry title="${%Maven location}" field="mvnHome"
-					description="path to maven.">
+				<f:entry title="${%Maven location}" field="mvnHome" 
+					description="Specify the maven home directory.">
 					<f:textbox default="${descriptor.defaultMvnHome}" />
 				</f:entry>
 			</f:advanced>

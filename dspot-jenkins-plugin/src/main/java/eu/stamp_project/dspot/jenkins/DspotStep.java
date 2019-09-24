@@ -1,16 +1,9 @@
 package eu.stamp_project.dspot.jenkins;
 
-import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 
@@ -34,15 +27,10 @@ import eu.stamp_project.utils.program.InputConfiguration;
 import hudson.Extension;
 import hudson.FilePath;
 import hudson.Launcher;
-import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.Result;
 import hudson.model.Run;
 import hudson.model.TaskListener;
-import hudson.scm.ChangeLogSet;
-import hudson.scm.EditType;
-import hudson.scm.ChangeLogSet.AffectedFile;
-import hudson.scm.ChangeLogSet.Entry;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Builder;
@@ -51,8 +39,12 @@ import spoon.reflect.declaration.CtType;
 
 public class DspotStep extends Builder implements SimpleBuildStep {
 
+	private static final String DEFAULT_PROJECT_PATH = "";
+	private static final String OUTPUT_DIRECTORY = "dspot-out/";
+	private static final int DEFAULT_NUM_ITERATIONS = 3;
 	private static final Logger LOGGER = LoggerFactory.getLogger(DspotStep.class);
 
+	// properties fields
 	@Nonnull
 	private String projectPath = DescriptorImpl.defaultProjectPath;
 	@Nonnull
@@ -60,31 +52,29 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 	@Nonnull
 	private String testCode = DescriptorImpl.defaultTestCode;
 	@Nonnull
+	private String pitVersion = DescriptorImpl.defaultPitVersion;
+	@Nonnull
+	private String testPitFilterClassesToKeep = DescriptorImpl.defaultPitFilterClassesToKeep;
+	@Nonnull
+	private String outputDir = DescriptorImpl.defaultOutputDir;
+
+	// optional fields
+	@Nonnull
 	private String srcClasses = DescriptorImpl.defaultSrcClasses;
 	@Nonnull
 	private String testClasses = DescriptorImpl.defaultTestClasses;
-	@Nonnull
-	private String testFilter = DescriptorImpl.defaultTestFilter;
-	@Nonnull
-	private String outputDir = DescriptorImpl.defaultOutputDir;
+
+	// advanced options
 	@Nonnull
 	private String secondFolder = DescriptorImpl.defaultSecondFolder;
 	@Nonnull
 	private String mvnHome = DescriptorImpl.defaultMvnHome;
-
-	private boolean onlyChanges = false;
-
-	private boolean showReports = true;
-
 	@Nonnull
 	private String selector = DescriptorImpl.defaultSelector;
-
 	@Nonnull
 	private String budgetizer = DescriptorImpl.defaultBudgetizer;
-
 	@Nonnull
 	private int numIterations = DescriptorImpl.defaultNumIterations;
-
 	@Nonnull
 	private String amplifiers = DescriptorImpl.defaultAmplifiers;
 
@@ -119,16 +109,8 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 		return testCode;
 	}
 
-	public String getTestFilter() {
-		return testFilter;
-	}
-
-	public boolean isOnlyChanges() {
-		return onlyChanges;
-	}
-
-	public boolean isShowReports() {
-		return showReports;
+	public String getPitFilterClassesToKeep() {
+		return testPitFilterClassesToKeep;
 	}
 
 	public String getBudgetizer() {
@@ -153,16 +135,6 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 
 	public String getMvnHome() {
 		return mvnHome;
-	}
-
-	@DataBoundSetter
-	public void setOnlyChanges(boolean onlyChanges) {
-		this.onlyChanges = onlyChanges;
-	}
-
-	@DataBoundSetter
-	public void setShowReports(boolean showReports) {
-		this.showReports = showReports;
 	}
 
 	@DataBoundSetter
@@ -196,8 +168,8 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 	}
 
 	@DataBoundSetter
-	public void setTestFilter(@Nonnull String testFilter) {
-		this.testFilter = testFilter;
+	public void setPitFilterClassesToKeep(@Nonnull String testPitFilterClassesToKeep) {
+		this.testPitFilterClassesToKeep = testPitFilterClassesToKeep;
 	}
 
 	@DataBoundSetter
@@ -235,7 +207,7 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 		return BuildStepMonitor.NONE;
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes", "static-access" })
+	@SuppressWarnings({ "static-access" })
 	@Override
 	public void perform(Run<?, ?> run, FilePath wsp, Launcher arg2, TaskListener listener)
 			throws InterruptedException, IOException {
@@ -246,11 +218,13 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 				new FilePath(wsp, testCode).getRemote());
 		init_properties.setProperty(ConstantsProperties.OUTPUT_DIRECTORY.getName(),
 				new FilePath(wsp, outputDir).getRemote());
-		init_properties.setProperty(ConstantsProperties.PIT_FILTER_CLASSES_TO_KEEP.getName(), testFilter);
-		init_properties.setProperty(ConstantsProperties.TEST_CLASSES.getName(),
-				new FilePath(wsp, testClasses).getRemote());
+		init_properties.setProperty(ConstantsProperties.PIT_FILTER_CLASSES_TO_KEEP.getName(),
+				testPitFilterClassesToKeep);
+
 		init_properties.setProperty(ConstantsProperties.SRC_CLASSES.getName(),
 				new FilePath(wsp, srcClasses).getRemote());
+		init_properties.setProperty(ConstantsProperties.TEST_CLASSES.getName(),
+				new FilePath(wsp, testClasses).getRemote());
 		init_properties.setProperty(ConstantsProperties.PATH_TO_SECOND_VERSION.getName(),
 				new FilePath(wsp, secondFolder).getRemote());
 		init_properties.setProperty(ConstantsProperties.MAVEN_HOME.getName(),
@@ -258,54 +232,9 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 
 		InputConfiguration.initialize(init_properties).setUseWorkingDirectory(true).setVerbose(true);
 
-		// analyze changes in workspace
-		List<String> testList = new ArrayList<>();
-
-		if (onlyChanges) {
-			ChangeLogSet<? extends Entry> changes = null;
-			if (AbstractBuild.class.isInstance(run)) {
-				AbstractBuild build = (AbstractBuild) run;
-				changes = build.getChangeSet();
-			} else {
-				try {
-					// checking for WorkflowRun's getChangeSets method
-					List<ChangeLogSet<? extends ChangeLogSet.Entry>> changeSets = (List<ChangeLogSet<? extends ChangeLogSet.Entry>>) run
-							.getClass().getMethod("getChangeSets").invoke(run);
-					if (!changeSets.isEmpty()) {
-						changes = changeSets.get(0);
-					}
-				} catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-					// ignore
-				}
-			}
-			if (changes != null) {
-				Iterator<? extends ChangeLogSet.Entry> itrChangeSet = changes.iterator();
-				while (itrChangeSet.hasNext()) {
-					ChangeLogSet.Entry str = itrChangeSet.next();
-					Collection<? extends ChangeLogSet.AffectedFile> affectedFiles = str.getAffectedFiles();
-					Iterator<? extends ChangeLogSet.AffectedFile> affectedFilesItr = affectedFiles.iterator();
-					while (affectedFilesItr.hasNext()) {
-						AffectedFile file = affectedFilesItr.next();
-						if (file.getEditType().equals(EditType.ADD) || file.getEditType().equals(EditType.EDIT)) {
-							String path = file.getPath();
-							if (path.startsWith(shouldUpdatePath.apply(testCode))) {
-								testList.add(path);
-								listener.getLogger().println("New test found at: " + path);
-							}
-						}
-					}
-				}
-				if (testList.isEmpty())
-					listener.getLogger().println("no tests changed. DSpot will not be run.");
-			} else {
-				listener.getLogger().println("could not get last changes. DSpot will run on the whole suite.");
-				onlyChanges = false;
-			}
-		}
-
 		try {
 
-			// amplifiers settings
+			// amplifiers option
 			String[] amplifiersArray = this.amplifiers.split(":");
 
 			// cleaning amplifyArray
@@ -318,9 +247,10 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 			}
 			List<Amplifier> amplifiers = AmplifierEnum.buildAmplifiersFromString(Arrays.asList(amplifiersArray));
 
-			// selector settings
+			// selector option
 			TestSelector testSelector = SelectorEnum.valueOf(selector).buildSelector();
 
+			// run DSpot
 			DSpot dspot = new DSpot(numIterations, amplifiers, testSelector, BudgetizerEnum.valueOf(budgetizer));
 			InputConfiguration.get().getFactory().getEnvironment()
 					.setInputClassLoader(DspotStep.class.getClassLoader());
@@ -328,11 +258,15 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 			final List<CtType<?>> amplifiedTestClasses;
 			final long startTime = System.currentTimeMillis();
 
-			if (onlyChanges) {
-				amplifiedTestClasses = dspot.amplifyTestClasses(
-						testList.stream().map(this::pathToQualifiedName).collect(Collectors.toList()));
-			} else
+			if (InputConfiguration.get().getTestClasses().isEmpty()
+					|| "all".equals(InputConfiguration.get().getTestClasses().get(0))) {
 				amplifiedTestClasses = dspot.amplifyAllTests();
+			} else {
+				// TODO amplifyTestClassesTestMethods needs to
+				// FULL_QUALIFIED_NAME_TEST_CLASS
+				amplifiedTestClasses = dspot.amplifyTestClassesTestMethods(InputConfiguration.get().getTestClasses(),
+						InputConfiguration.get().getTestCases());
+			}
 
 			LOGGER.info("Amplification {}.", amplifiedTestClasses.isEmpty() ? "failed" : "succeed");
 			final long elapsedTime = System.currentTimeMillis() - startTime;
@@ -356,32 +290,29 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 		run.addAction(action);
 	}
 
-	public String pathToQualifiedName(String path) {
-		String regex = File.separator.equals("/") ? "/" : "\\\\";
-		return path.substring(getTestCode().length(), path.length() - ".java".length()).replaceAll(regex, ".");
-	}
-
-	public static final Function<String, String> shouldUpdatePath = string -> File.separator.equals("/") ? string
-			: string.replaceAll("/", "\\\\");
-
 	@Symbol("dspot")
 	@Extension
 	public static class DescriptorImpl extends BuildStepDescriptor<Builder> {
+		// properties fields
+		public static final String defaultProjectPath = DEFAULT_PROJECT_PATH;
+		public static final String defaultSrcCode = ConstantsProperties.SRC_CODE.getDefaultValue();
+		public static final String defaultTestCode = ConstantsProperties.TEST_SRC_CODE.getDefaultValue();
+		public static final String defaultPitVersion = ConstantsProperties.PIT_VERSION.getDefaultValue();
+		public static final String defaultPitFilterClassesToKeep = ConstantsProperties.PIT_FILTER_CLASSES_TO_KEEP
+				.getDefaultValue();
+		public static final String defaultOutputDir = OUTPUT_DIRECTORY;
+
+		// optional fields
+		public static final String defaultSrcClasses = ConstantsProperties.SRC_CLASSES.getDefaultValue();
+		public static final String defaultTestClasses = ConstantsProperties.TEST_CLASSES.getDefaultValue();
+
+		// odvanced options
 		public static final String defaultMvnHome = ConstantsProperties.MAVEN_HOME.getDefaultValue();
 		public static final String defaultSecondFolder = "";
 		public static final String defaultAmplifiers = "None";
 		public static final String defaultSelector = SelectorEnum.PitMutantScoreSelector.toString();
-		public static final int defaultNumIterations = 3;
+		public static final int defaultNumIterations = DEFAULT_NUM_ITERATIONS;
 		public static final String defaultBudgetizer = BudgetizerEnum.RandomBudgetizer.toString();
-		public static final String defaultProjectPath = "";
-		public static final String defaultSrcCode = ConstantsProperties.SRC_CODE.getDefaultValue();
-		public static final String defaultTestCode = ConstantsProperties.TEST_SRC_CODE.getDefaultValue();
-		public static final String defaultSrcClasses = ConstantsProperties.SRC_CLASSES.getDefaultValue();
-		public static final String defaultTestClasses = ConstantsProperties.TEST_CLASSES.getDefaultValue();
-		public static final String defaultTestFilter = ConstantsProperties.PIT_FILTER_CLASSES_TO_KEEP.getDefaultValue();
-		public static final String defaultOutputDir = "dspot-out";
-		public static final boolean defaultOnlyChanges = false;
-		public static final boolean defaultShowReports = true;
 
 		public DescriptorImpl() {
 			super();
@@ -390,9 +321,10 @@ public class DspotStep extends Builder implements SimpleBuildStep {
 
 		@Override
 		public String getDisplayName() {
-			return "STAMP DSpot";
+			return "STAMP DSpot configuration";
 		}
 
+		@SuppressWarnings("rawtypes")
 		@Override
 		public boolean isApplicable(Class<? extends AbstractProject> jobType) {
 			return true;
