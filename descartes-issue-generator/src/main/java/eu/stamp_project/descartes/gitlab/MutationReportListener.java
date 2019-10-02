@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringReader;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,7 +37,7 @@ public class MutationReportListener implements MutationResultListener {
 	ListenerArguments listenerArguments;
 	IssueLogger out;
 	int coverage = 0;
-	public static boolean underTest = false;
+	private static int reportCount = 1;
 
 	public MutationReportListener(Properties props, ListenerArguments args) {
 		this.configuration = (props != null ? props : new Properties());
@@ -45,8 +46,7 @@ public class MutationReportListener implements MutationResultListener {
 	}
 
 	public void runStart() {
-		MutationReportListener.underTest = true;
-		System.out.println("**** STAMP MutationReportListener::runStart()");
+		System.out.println("**** STAMP MutationReportListener::runStart(" + MutationReportListener.reportCount + ")");
 		this.configuration.list(System.out);
 
 		// Retrieve Gitlab configuration, if any
@@ -69,6 +69,10 @@ public class MutationReportListener implements MutationResultListener {
 
 		boolean withCriticalIssues = false;
 		for (MutationResult mutation : results.getMutations()) {
+
+			// Ignore main() methods if any (not a target for unit tests, to run by hand)
+			if("main".equals(mutation.getDetails().getMethod())) continue;
+
 			List<String> succeedingTests = null;
 
 			// Retrieve succeeding tests list
@@ -76,7 +80,7 @@ public class MutationReportListener implements MutationResultListener {
 			// Otherwise, assume the list of tests run all pass when mutation survived...
 			if(this.listenerArguments.isFullMutationMatrix()) {
 				succeedingTests = mutation.getSucceedingTests();
-			} else if (mutation.getStatus() == DetectionStatus.SURVIVED) {
+			} else if (mutation.getStatus() == DetectionStatus.SURVIVED || mutation.getStatus() == DetectionStatus.TIMED_OUT) {
 				List<TestInfo> succeedingTestsInfo = mutation.getDetails().getTestsInOrder();
 				for(TestInfo testInfo : succeedingTestsInfo) {
 					if(succeedingTests == null) succeedingTests = new LinkedList<String>();
@@ -86,9 +90,9 @@ public class MutationReportListener implements MutationResultListener {
 
 			if(succeedingTests != null && succeedingTests.size() > 0) {
 				out.log(mutation.getStatus(), "==========================================================================");
-				if(mutation.getStatus() == DetectionStatus.SURVIVED) {
+				if(mutation.getStatus() == DetectionStatus.SURVIVED || mutation.getStatus() == DetectionStatus.TIMED_OUT) {
 					withCriticalIssues = true;
-					out.logSurvived("CRITICAL TEST FAILURE: test suite GREEN upon code mutation");
+					out.logSurvived("CRITICAL TEST FAILURE: test suite " + (mutation.getStatus() == DetectionStatus.SURVIVED ? "GREEN" : "TIMEOUT") + " upon code mutation");
 				} else {
 					out.logKilled("Minor test failure: some test(s) do not detect code mutation");
 				}
@@ -96,10 +100,10 @@ public class MutationReportListener implements MutationResultListener {
 						"In class " + mutation.getDetails().getClassName()
 						+ ", method " +  mutation.getDetails().getMethod()
 						+ " (line " + mutation.getDetails().getLineNumber()
-						+ ") was updated as follows:");
-				out.log(mutation.getStatus(), "\t" + mutation.getDetails().getDescription());
+						+ ") was updated as follows: " + mutation.getDetails().getDescription());
+
 				out.log(mutation.getStatus(),
-						"\t" + "The following test(s) still PASS:");
+						"\t" + "The following test(s) " + (mutation.getStatus() == DetectionStatus.SURVIVED ? "still PASS" : "time out") + ":");
 
 				for(String succeedingtest : succeedingTests) {
 					out.log(mutation.getStatus(), "\t\t" + succeedingtest);
@@ -128,8 +132,7 @@ public class MutationReportListener implements MutationResultListener {
 				out.logNoCoverage("In class " + mutation.getDetails().getClassName()
 						+ ", method " +  mutation.getDetails().getMethod()
 						+ " (line " + mutation.getDetails().getLineNumber()
-						+ ") was updated as follows:");
-				out.logNoCoverage("\t" + mutation.getDetails().getDescription());
+						+ ") was updated as follows: " + mutation.getDetails().getDescription());
 				out.logNoCoverage("\t" + "No test provided, no chance to detect any bug here.");
 				out.logNoCoverage("==========================================================================");
 			}
@@ -137,7 +140,7 @@ public class MutationReportListener implements MutationResultListener {
 		
 		//TODO focus DSpot on this case ?
 		if(withCriticalIssues && ! succeedingTestClasses.isEmpty()) {
-			DspotInvoker dspot = new DspotInvoker(null, "2.1.1-SNAPSHOT")
+			DspotInvoker dspot = new DspotInvoker(null, "2.2.1-SNAPSHOT")
 				.withPersistentConfig(true)
 				.withOutputDir("src/test/java")
 				.withJacocoCriterion()
@@ -153,7 +156,7 @@ public class MutationReportListener implements MutationResultListener {
 	}
 
 	public void runEnd() {
-		System.out.println("**** STAMP MutationReportListener::runEnd()");
+		System.out.println("**** STAMP MutationReportListener::runEnd(" + MutationReportListener.reportCount + ")");
 		
 		this.out.close();
 		
@@ -179,8 +182,8 @@ public class MutationReportListener implements MutationResultListener {
 		}
 		
 		// Generate Gitlab issue(s) if requested
-		Issue criticalIssue = findIssueByTitle("CRITICAL (STAMP generated)");
-		Issue minorIssue = findIssueByTitle("MINOR (STAMP generated)");
+		Issue criticalIssue = findIssueByTitle("CRITICAL (STAMP generated pass #" + MutationReportListener.reportCount + ")");
+		Issue minorIssue = findIssueByTitle("MINOR (STAMP generated pass #" + MutationReportListener.reportCount + ")");
 		try {
 			if(criticalIssue != null) {
 				if(out.getSurvivedLog() != null) {
@@ -194,7 +197,7 @@ public class MutationReportListener implements MutationResultListener {
 			} else {
 				if(out.getSurvivedLog() != null) {
 					GitlabIssueManager.createIssue(this.gitlabConfig,
-						"CRITICAL (STAMP generated): Test suite green when code removed",
+						"CRITICAL (STAMP generated pass #" + MutationReportListener.reportCount + "): Test suite green when code removed",
 						gitlabIssueSummary(FileUtils.fileToString(new File(out.getSurvivedLog()))));
 				}
 			}
@@ -211,7 +214,7 @@ public class MutationReportListener implements MutationResultListener {
 			} else {
 				if(out.getKilledLog() != null) {
 					GitlabIssueManager.createIssue(this.gitlabConfig,
-						"MINOR (STAMP generated): Some test(s) do(es) not detect changes in code",
+						"MINOR (STAMP generated pass #" + MutationReportListener.reportCount + "): Some test(s) do(es) not detect changes in code",
 						gitlabIssueSummary(FileUtils.fileToString(new File(out.getKilledLog()))));
 				}
 			}
@@ -220,21 +223,45 @@ public class MutationReportListener implements MutationResultListener {
 			e.printStackTrace(System.err);
 		}
 		
-		MutationReportListener.underTest = false;
-		
+		MutationReportListener.reportCount ++;
 	}
 	
 	private String gitlabIssueSummary(String issueContent) {
 		StringBuilder summary = new StringBuilder(
 				"When some methods are emptied or their content is replaced by a single \"return\" statement, the test suite detects nothing and passes.\n\n"
 				+ "In other words, massive code removal is not detected by JUnit tests: global mutation coverage is "
-				+ this.listenerArguments.getCoverage().createSummary().getCoverage() + "\n\n"
+				+ this.listenerArguments.getCoverage().createSummary().getCoverage() + "%\n\n"
 				+ "Detailed report of which classe(s) / test(s) are concerned follows:\n");
 
 		if(issueContent != null) {
-			summary.append("\n```\n" + issueContent + "\n```\n");
+			// Gitlab issue text length is max 1.000.000 characters
+			if(issueContent.length() <= 999500) {
+				summary.append("\n```\n" + issueContent + "\n```\n");
+			} else {
+				// Remove details
+				// TODO attach file with full details
+				summary.append("\n```\n" + summarizeReport(issueContent) + "\n```\n");
+			}
 		}
+
+		return summary.toString();
+	}
+	
+	private String summarizeReport(String report) {
+		StringBuilder summary = new StringBuilder();
+		BufferedReader in = null;
+		try {
+			in = new BufferedReader(new StringReader(report));
 		
+			String line;
+			while((line = in.readLine()) != null) {
+				if(! line.startsWith("\t")) summary.append(line + "\n");
+			}
+		} catch(IOException e) {
+		} finally {
+			if(in != null) try { in.close(); } catch(Exception igonre) { }
+		}
+		if(summary.length() > 999500) summary.setLength(999500); // Could not summarize enough... Truncate !
 		return summary.toString();
 	}
 	
@@ -345,7 +372,7 @@ class IssueLogger {
 	 * @param data Issue content, to be logged
 	 */
 	public void log(DetectionStatus what, String data) {
-		if(what == DetectionStatus.SURVIVED) {
+		if(what == DetectionStatus.SURVIVED || what == DetectionStatus.TIMED_OUT) {
 			logSurvived(data);
 		} else if(what == DetectionStatus.KILLED) {
 			logKilled(data);
