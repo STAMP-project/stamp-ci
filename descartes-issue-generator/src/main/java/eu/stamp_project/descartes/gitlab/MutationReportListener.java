@@ -80,7 +80,7 @@ public class MutationReportListener implements MutationResultListener {
 			// Otherwise, assume the list of tests run all pass when mutation survived...
 			if(this.listenerArguments.isFullMutationMatrix()) {
 				succeedingTests = mutation.getSucceedingTests();
-			} else if (mutation.getStatus() == DetectionStatus.SURVIVED || mutation.getStatus() == DetectionStatus.TIMED_OUT) {
+			} else if (mutation.getStatus() == DetectionStatus.SURVIVED) {
 				List<TestInfo> succeedingTestsInfo = mutation.getDetails().getTestsInOrder();
 				for(TestInfo testInfo : succeedingTestsInfo) {
 					if(succeedingTests == null) succeedingTests = new LinkedList<String>();
@@ -90,9 +90,9 @@ public class MutationReportListener implements MutationResultListener {
 
 			if(succeedingTests != null && succeedingTests.size() > 0) {
 				out.log(mutation.getStatus(), "==========================================================================");
-				if(mutation.getStatus() == DetectionStatus.SURVIVED || mutation.getStatus() == DetectionStatus.TIMED_OUT) {
+				if(mutation.getStatus() == DetectionStatus.SURVIVED) {
 					withCriticalIssues = true;
-					out.logSurvived("CRITICAL TEST FAILURE: test suite " + (mutation.getStatus() == DetectionStatus.SURVIVED ? "GREEN" : "TIMEOUT") + " upon code mutation");
+					out.logSurvived("CRITICAL TEST FAILURE: test suite GREEN upon code mutation");
 				} else {
 					out.logKilled("Minor test failure: some test(s) do not detect code mutation");
 				}
@@ -103,7 +103,7 @@ public class MutationReportListener implements MutationResultListener {
 						+ ") was updated as follows: " + mutation.getDetails().getDescription());
 
 				out.log(mutation.getStatus(),
-						"\t" + "The following test(s) " + (mutation.getStatus() == DetectionStatus.SURVIVED ? "still PASS" : "time out") + ":");
+						"\t" + "The following test(s) still PASS:");
 
 				for(String succeedingtest : succeedingTests) {
 					out.log(mutation.getStatus(), "\t\t" + succeedingtest);
