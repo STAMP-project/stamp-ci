@@ -93,13 +93,16 @@ public class GitlabIssueManager
      * @throws IOException
      */
     public static List<Issue> listIssues(Properties gitlabConfig, String state) throws IOException {
+	if(gitlabConfig == null) {
+		throw new IOException("Missing Gitlab URL and/or private token and/or project ID or path in gitlab.properties");
+	}
     	String gitlabUrl = gitlabConfig.getProperty("gitlab.url");
-		String gitlabToken = gitlabConfig.getProperty("gitlab.token");
-		String gitlabProject = gitlabConfig.getProperty("gitlab.project");
-		if(gitlabUrl == null || gitlabToken == null || gitlabProject == null) {
-			throw new IOException("Missing Gitlab URL and/or private token and/or project ID or path in gitlab.properties");
-		}
-		return listIssues(gitlabUrl, gitlabToken, gitlabProject, state);
+	String gitlabToken = gitlabConfig.getProperty("gitlab.token");
+	String gitlabProject = gitlabConfig.getProperty("gitlab.project");
+	if(gitlabUrl == null || gitlabToken == null || gitlabProject == null) {
+		throw new IOException("Missing Gitlab URL and/or private token and/or project ID or path in gitlab.properties");
+	}
+	return listIssues(gitlabUrl, gitlabToken, gitlabProject, state);
     }
 
     /**
@@ -123,13 +126,16 @@ public class GitlabIssueManager
      * @throws IOException
      */
     public static Issue getIssue(Properties gitlabConfig, int iid) throws IOException {
+	if(gitlabConfig == null) {
+		throw new IOException("Missing Gitlab URL and/or private token and/or project ID or path in gitlab.properties");
+	}
     	String gitlabUrl = gitlabConfig.getProperty("gitlab.url");
-		String gitlabToken = gitlabConfig.getProperty("gitlab.token");
-		String gitlabProject = gitlabConfig.getProperty("gitlab.project");
-		if(gitlabUrl == null || gitlabToken == null || gitlabProject == null) {
-			throw new IOException("Missing Gitlab URL and/or private token and/or project ID or path in gitlab.properties");
-		}
-		return getIssue(gitlabUrl, gitlabToken, gitlabProject, iid);
+	String gitlabToken = gitlabConfig.getProperty("gitlab.token");
+	String gitlabProject = gitlabConfig.getProperty("gitlab.project");
+	if(gitlabUrl == null || gitlabToken == null || gitlabProject == null) {
+		throw new IOException("Missing Gitlab URL and/or private token and/or project ID or path in gitlab.properties");
+	}
+	return getIssue(gitlabUrl, gitlabToken, gitlabProject, iid);
     }
     
     /**
@@ -155,13 +161,16 @@ public class GitlabIssueManager
      * @throws IOException
      */
     public static boolean commentIssue(Properties gitlabConfig, int iid, String body) throws IOException {
+	if(gitlabConfig == null) {
+		throw new IOException("Missing Gitlab URL and/or private token and/or project ID or path in gitlab.properties");
+	}
     	String gitlabUrl = gitlabConfig.getProperty("gitlab.url");
-		String gitlabToken = gitlabConfig.getProperty("gitlab.token");
-		String gitlabProject = gitlabConfig.getProperty("gitlab.project");
-		if(gitlabUrl == null || gitlabToken == null || gitlabProject == null) {
-			throw new IOException("Missing Gitlab URL and/or private token and/or project ID or path in gitlab.properties");
-		}
-		return commentIssue(gitlabUrl, gitlabToken, gitlabProject, iid, body);
+	String gitlabToken = gitlabConfig.getProperty("gitlab.token");
+	String gitlabProject = gitlabConfig.getProperty("gitlab.project");
+	if(gitlabUrl == null || gitlabToken == null || gitlabProject == null) {
+		throw new IOException("Missing Gitlab URL and/or private token and/or project ID or path in gitlab.properties");
+	}
+	return commentIssue(gitlabUrl, gitlabToken, gitlabProject, iid, body);
     }
     
     /**
@@ -187,13 +196,16 @@ public class GitlabIssueManager
      * @throws IOException
      */
     public static Issue createIssue(Properties gitlabConfig, String title, String description) throws IOException {
+	if(gitlabConfig == null) {
+		throw new IOException("Missing Gitlab URL and/or private token and/or project ID or path in gitlab.properties");
+	}
     	String gitlabUrl = gitlabConfig.getProperty("gitlab.url");
-		String gitlabToken = gitlabConfig.getProperty("gitlab.token");
-		String gitlabProject = gitlabConfig.getProperty("gitlab.project");
-		if(gitlabUrl == null || gitlabToken == null || gitlabProject == null) {
-			throw new IOException("Missing Gitlab URL and/or private token and/or project ID or path in gitlab.properties");
-		}
-		return createIssue(gitlabUrl, gitlabToken, gitlabProject, title, description);
+	String gitlabToken = gitlabConfig.getProperty("gitlab.token");
+	String gitlabProject = gitlabConfig.getProperty("gitlab.project");
+	if(gitlabUrl == null || gitlabToken == null || gitlabProject == null) {
+		throw new IOException("Missing Gitlab URL and/or private token and/or project ID or path in gitlab.properties");
+	}
+	return createIssue(gitlabUrl, gitlabToken, gitlabProject, title, description);
     }
     
     /**
@@ -221,13 +233,16 @@ public class GitlabIssueManager
      * @throws IOException
      */
     public static Issue updateIssue(Properties gitlabConfig, int iid, String title, String description) throws IOException {
+	if(gitlabConfig == null) {
+		throw new IOException("Missing Gitlab URL and/or private token and/or project ID or path in gitlab.properties");
+	}
     	String gitlabUrl = gitlabConfig.getProperty("gitlab.url");
-		String gitlabToken = gitlabConfig.getProperty("gitlab.token");
-		String gitlabProject = gitlabConfig.getProperty("gitlab.project");
-		if(gitlabUrl == null || gitlabToken == null || gitlabProject == null) {
-			throw new IOException("Missing Gitlab URL and/or private token and/or project ID or path in gitlab.properties");
-		}
-		return updateIssue(gitlabUrl, gitlabToken, gitlabProject, iid, title, description);
+	String gitlabToken = gitlabConfig.getProperty("gitlab.token");
+	String gitlabProject = gitlabConfig.getProperty("gitlab.project");
+	if(gitlabUrl == null || gitlabToken == null || gitlabProject == null) {
+		throw new IOException("Missing Gitlab URL and/or private token and/or project ID or path in gitlab.properties");
+	}
+	return updateIssue(gitlabUrl, gitlabToken, gitlabProject, iid, title, description);
     }
     
     /**
@@ -249,13 +264,16 @@ public class GitlabIssueManager
      * @throws IOException
      */
     public static void deleteIssue(Properties gitlabConfig, int iid) throws IOException {
+	if(gitlabConfig == null) {
+		throw new IOException("Missing Gitlab URL and/or private token and/or project ID or path in gitlab.properties");
+	}
     	String gitlabUrl = gitlabConfig.getProperty("gitlab.url");
-		String gitlabToken = gitlabConfig.getProperty("gitlab.token");
-		String gitlabProject = gitlabConfig.getProperty("gitlab.project");
-		if(gitlabUrl == null || gitlabToken == null || gitlabProject == null) {
-			throw new IOException("Missing Gitlab URL and/or private token and/or project ID or path in gitlab.properties");
-		}
-		deleteIssue(gitlabUrl, gitlabToken, gitlabProject, iid);
+	String gitlabToken = gitlabConfig.getProperty("gitlab.token");
+	String gitlabProject = gitlabConfig.getProperty("gitlab.project");
+	if(gitlabUrl == null || gitlabToken == null || gitlabProject == null) {
+		throw new IOException("Missing Gitlab URL and/or private token and/or project ID or path in gitlab.properties");
+	}
+	deleteIssue(gitlabUrl, gitlabToken, gitlabProject, iid);
     }
 
     /**
